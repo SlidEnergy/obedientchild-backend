@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ObedientChild.App\ObedientChild.App.csproj" />
+		<ProjectReference Include="..\Slid.Auth.Core\Slid.Auth.Core.csproj" />
+	</ItemGroup>
+
+</Project>

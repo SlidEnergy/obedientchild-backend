@@ -1,7 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using ObedientChild.Domain;
 using ObedientChild.Infrastructure;
-using ObedientChild.WebApi.Dto;
 
 namespace ObedientChild.WebApi
 {
@@ -15,6 +15,8 @@ namespace ObedientChild.WebApi
 
 
 			CreateMap<Dto.User, ApplicationUser>();
-		}
+
+            CreateMap<Child, Dto.Child>();
+        }
 	}
 }

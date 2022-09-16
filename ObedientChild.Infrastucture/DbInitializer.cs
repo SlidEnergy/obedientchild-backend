@@ -33,7 +33,9 @@ namespace ObedientChild.Infrastucture
 			_context.Database.EnsureCreated();
 
 			await CreateDefaultUserAndRoleAsync();
-		}
+
+            await CreateChildrenAsync();
+        }
 
 		private async Task CreateDefaultUserAndRoleAsync()
 		{
@@ -142,5 +144,21 @@ namespace ObedientChild.Infrastucture
 
 		private static string GetIdentiryErrorsInCommaSeperatedList(IdentityResult result) =>
 			Lers.Utils.ArrayUtils.JoinToString(result.Errors.Select(x => x.Description), ", ");
+
+        private async Task CreateChildrenAsync()
+        {
+            var count = await _context.Children.CountAsync();
+
+            // Для пустой базы создаем детей
+            if (count == 0)
+            {
+                var child1 = new Child("Аня");
+                var child2 = new Child("Влада");
+                _context.Children.Add(child1);
+                _context.Children.Add(child2);
+
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

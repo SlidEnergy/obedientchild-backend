@@ -33,7 +33,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ObedientChild.App\ObedientChild.App.csproj" />
-		<ProjectReference Include="..\ObedientChild.Infrastucture\ObedientChild.Infrastucture.csproj" />
+		<ProjectReference Include="..\ObedientChild.Infrastucture\ObedientChild.Infrastructure.csproj" />
 		<ProjectReference Include="..\Slid.Auth.WebApi\Slid.Auth.WebApi.csproj" />
 	</ItemGroup>
 

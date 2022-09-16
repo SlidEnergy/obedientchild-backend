@@ -17,6 +17,8 @@ namespace ObedientChild.App
 
 		DbSet<IdentityUserRole<string>> UserRoles { get; set; }
 
+		DbSet<Child> Children { get; set; }
+
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 
 		EntityEntry Entry(object entity);

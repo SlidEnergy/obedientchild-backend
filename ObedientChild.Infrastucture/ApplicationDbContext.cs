@@ -20,7 +20,7 @@ namespace ObedientChild.Infrastructure
         public DbSet<AuthToken> AuthTokens { get; set; }
 
         public DbSet<Trustee> Trustee { get; set; }
-
-        public DbSet<ApplicationUser> Users { get; set; }
+        
+        public DbSet<Child> Children { get; set; }
     }
 }

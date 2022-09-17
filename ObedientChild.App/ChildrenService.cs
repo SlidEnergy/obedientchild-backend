@@ -40,5 +40,37 @@ namespace ObedientChild.App
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<int> EarnCountAsync(int childId, int count = 1)
+        {
+            var child = await _context.Children.FindAsync(childId);
+
+            if (child != null)
+            {
+                child.EarnCoin(count);
+
+                await _context.SaveChangesAsync();
+
+                return child.Balance;
+            }
+
+            return 0;
+        }
+
+        public async Task<int> SpendCountAsync(int childId, int count)
+        {
+            var child = await _context.Children.FindAsync(childId);
+
+            if (child != null)
+            {
+                child.SpendCoin(count);
+
+                await _context.SaveChangesAsync();
+
+                return child.Balance;
+            }
+
+            return 0;
+        }
     }
 }

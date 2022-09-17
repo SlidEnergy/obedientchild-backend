@@ -11,5 +11,9 @@ namespace ObedientChild.App
         Task<Child> GetByIdAsync(int childId);
         
         Task SaveAvatarAsync(int childId, byte[] image);
+
+        Task<int> EarnCountAsync(int childId, int count);
+
+        Task<int> SpendCountAsync(int childId, int count);
     }
 }

@@ -22,5 +22,7 @@ namespace ObedientChild.Infrastructure
         public DbSet<Trustee> Trustee { get; set; }
         
         public DbSet<Child> Children { get; set; }
+
+        public DbSet<Reward> Rewards { get; set; }
     }
 }

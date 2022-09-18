@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
+using ObedientChild.Infrastructure.SearchImages;
 
 namespace ObedientChild.WebApi
 {
@@ -56,6 +57,8 @@ namespace ObedientChild.WebApi
             ConfigureApplicationServices(services);
 
             ConfigurePolicies(services);
+
+            ConfigureSearchImages(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -289,6 +292,27 @@ namespace ObedientChild.WebApi
                 options.AddPolicy(Policy.MustBeAllOrExportAccessMode, policy => policy.RequireClaim(nameof(AccessMode), AccessMode.All.ToString(), AccessMode.Export.ToString()));
                 options.AddPolicy(Policy.MustBeAdmin, policy => policy.RequireRole(Role.Admin));
             });
+        }
+
+        private void ConfigureSearchImages(IServiceCollection services)
+        {
+            SerpapiOptions serpapiOptions;
+
+            if (CurrentEnvironment.IsDevelopment())
+            {
+                serpapiOptions = Configuration
+                    .GetSection("Serpapi")
+                    .Get<SerpapiOptions>();
+            }
+            else
+            {
+                serpapiOptions = new SerpapiOptions
+                {
+                    ApiKey = Environment.GetEnvironmentVariable("SERPAPI_APIKEY"),
+                };
+            }
+
+            services.AddSearchImages(serpapiOptions);
         }
     }
 }

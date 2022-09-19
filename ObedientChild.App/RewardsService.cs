@@ -30,5 +30,16 @@ namespace ObedientChild.App
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteRewardAsync(int id)
+        {
+            var reward = await _context.Rewards.FindAsync(id);
+
+            if (reward != null)
+            {
+                _context.Rewards.Remove(reward);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

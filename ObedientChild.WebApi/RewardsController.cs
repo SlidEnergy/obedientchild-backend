@@ -46,5 +46,11 @@ namespace ObedientChild.WebApi
                 await _rewardsService.AddRewardAsync(reward);
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task DeleteReward(int id)
+        {
+             await _rewardsService.DeleteRewardAsync(id);
+        }
     }
 }

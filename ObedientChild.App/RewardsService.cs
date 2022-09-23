@@ -41,5 +41,14 @@ namespace ObedientChild.App
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<Reward> UpdateAsync(Reward reward)
+        {
+            _context.Entry(reward).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return reward;
+        }
     }
 }

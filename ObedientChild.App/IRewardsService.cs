@@ -13,5 +13,7 @@ namespace ObedientChild.App
         Task AddRewardAsync(Reward reward);
 
         Task DeleteRewardAsync(int id);
+        
+        Task<Reward> UpdateAsync(Reward reward);
     }
 }

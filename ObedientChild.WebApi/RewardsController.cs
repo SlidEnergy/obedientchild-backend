@@ -52,5 +52,11 @@ namespace ObedientChild.WebApi
         {
              await _rewardsService.DeleteRewardAsync(id);
         }
+
+        [HttpPost("{id}")]
+        public async Task<ActionResult<Reward>> Update(int id, [FromBody] Reward reward)
+        {
+            return await _rewardsService.UpdateAsync(reward);
+        }
     }
 }

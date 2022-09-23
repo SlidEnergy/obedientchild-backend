@@ -72,5 +72,31 @@ namespace ObedientChild.App
 
             return 0;
         }
+
+        public async Task SetGoalAsync(int id, int rewardId)
+        {
+            var child = await _context.Children.FindAsync(id);
+            var reward = await _context.Rewards.FindAsync(rewardId);
+
+            if (child != null && reward != null)
+            {
+                child.SetBigGoal(rewardId);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task SetDreamAsync(int id, int rewardId)
+        {
+            var child = await _context.Children.FindAsync(id);
+            var reward = await _context.Rewards.FindAsync(rewardId);
+
+            if (child != null && reward != null)
+            {
+                child.SetDream(rewardId);
+
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

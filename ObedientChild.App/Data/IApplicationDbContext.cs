@@ -21,6 +21,10 @@ namespace ObedientChild.App
 
         DbSet<Reward> Rewards { get; set; }
 
+        DbSet<GoodDeed> GoodDeeds { get; set; }
+
+        DbSet<BadDeed> BadDeeds { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 
 		EntityEntry Entry(object entity);

@@ -9,48 +9,48 @@ namespace ObedientChild.WebApi
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class RewardsController : ControllerBase
+    public class GoodDeedsController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IRewardsService _rewardsService;
+        private readonly IGoodDeedService _service;
 
-        public RewardsController(IMapper mapper, IRewardsService rewardsService)
+        public GoodDeedsController(IMapper mapper, IGoodDeedService service)
         {
             _mapper = mapper;
-            _rewardsService = rewardsService;
+            _service = service;
         }
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<Reward>>> GetList()
+        public async Task<ActionResult<IEnumerable<GoodDeed>>> GetList()
         {
-            var list = await _rewardsService.GetListAsync();
+            var list = await _service.GetListAsync();
 
             return list;
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<Reward>> GetById(int id)
+        public async Task<ActionResult<GoodDeed>> GetById(int id)
         {
-            var item = await _rewardsService.GetByIdAsync(id);
+            var item = await _service.GetByIdAsync(id);
 
             return item;
         }
 
         [HttpPut]
-        public async Task Add(Reward reward)
+        public async Task Add(GoodDeed reward)
         {
             if (ModelState.IsValid)
             {
-                await _rewardsService.AddRewardAsync(reward);
+                await _service.AddAsync(reward);
             }
         }
 
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-             await _rewardsService.DeleteRewardAsync(id);
+             await _service.DeleteAsync(id);
         }
     }
 }

@@ -15,5 +15,9 @@ namespace ObedientChild.App
         Task<int> EarnCountAsync(int childId, int count);
 
         Task<int> SpendCountAsync(int childId, int count);
+
+        Task SetGoalAsync(int id, int rewardId);
+
+        Task SetDreamAsync(int id, int rewardId);
     }
 }

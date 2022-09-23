@@ -87,5 +87,17 @@ namespace ObedientChild.WebApi
 
             return balance;
         }
+
+        [HttpPost("{id}/setgoal")]
+        public async Task SetGoal(int id, [FromBody] int rewardId)
+        {
+            await _childrenService.SetGoalAsync(id, rewardId);
+        }
+
+        [HttpPost("{id}/setdream")]
+        public async Task SetDream(int id, [FromBody] int rewardId)
+        {
+            await _childrenService.SetDreamAsync(id, rewardId);
+        }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
 namespace ObedientChild.Domain
 {
-    public class Reward
+    public class GoodDeed
     {
         public int Id { get; set; }
 

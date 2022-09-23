@@ -36,11 +36,11 @@ namespace ObedientChild.WebApi
 
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<Child>> GetById(int id)
+        public async Task<ActionResult<Dto.Child>> GetById(int id)
         {
             var item = await _childrenService.GetByIdAsync(id);
 
-            return item;
+            return _mapper.Map<Dto.Child>(item); ;
         }
 
         [HttpPost("{id}/avatar")]

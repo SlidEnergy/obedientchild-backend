@@ -14,7 +14,8 @@ namespace ObedientChild.WebApi
                     opt => opt.Ignore());
 
 
-            CreateMap<Dto.User, ApplicationUser>();
+            CreateMap<Dto.User, ApplicationUser>()
+                .ForAllMembers(opt => opt.Ignore());
 
             CreateMap<Child, Dto.Child>()
                 .ForMember(dest => dest.Avatar,

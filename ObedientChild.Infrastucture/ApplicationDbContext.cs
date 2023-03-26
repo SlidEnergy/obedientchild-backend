@@ -26,5 +26,7 @@ namespace ObedientChild.Infrastructure
         public DbSet<Reward> Rewards { get; set; }
         public DbSet<GoodDeed> GoodDeeds { get; set; }
         public DbSet<BadDeed> BadDeeds { get; set; }
+
+        public DbSet<CoinHistory> CoinHistory { get; set; }
     }
 }

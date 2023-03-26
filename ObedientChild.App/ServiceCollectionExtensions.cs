@@ -12,6 +12,7 @@ namespace ObedientChild.App
 			services.AddScoped<IRewardsService, RewardsService>();
 			services.AddScoped<IGoodDeedService, GoodDeedService>();
 			services.AddScoped<IBadDeedService, BadDeedService>();
+			services.AddScoped<ICoinHistoryService, CoinHistoryService>();
 
 			return services;
 		}

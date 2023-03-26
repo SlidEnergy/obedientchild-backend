@@ -72,18 +72,34 @@ namespace ObedientChild.WebApi
             return File(child.Avatar, "image/png");
         }
 
-        [HttpPost("{id}/earn/{count?}")]
-        public async Task<int> EarnCoin(int id, int count = 1)
+        [HttpPut("{id}/earn/{count}")]
+        public async Task<int> EarnCoin(int id, int count)
         {
             var balance = await _childrenService.EarnCountAsync(id, count);
 
             return balance;
         }
 
-        [HttpPost("{id}/spend/{count?}")]
-        public async Task<int> SpendCoin(int id, int count = 1)
+        [HttpPut("{id}/earn")]
+        public async Task<int> EarnCoin(int id, [FromBody]Reward reward)
+        {
+            var balance = await _childrenService.EarnAsync(id, reward);
+
+            return balance;
+        }
+
+        [HttpPut("{id}/spend/{count}")]
+        public async Task<int> SpendCoin(int id, int count)
         {
             var balance = await _childrenService.SpendCountAsync(id, count);
+
+            return balance;
+        }
+
+        [HttpPut("{id}/spend/{count?}")]
+        public async Task<int> SpendCoin(int id, [FromBody]Reward reward)
+        {
+            var balance = await _childrenService.SpendAsync(id, reward);
 
             return balance;
         }

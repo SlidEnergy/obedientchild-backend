@@ -9,7 +9,6 @@ namespace ObedientChild.App
         Task<List<CoinHistory>> GetListAsync();
 
         Task<CoinHistory> GetByIdAsync(int id);
-        Task AddAsync(CoinHistory deed);
         Task RevertAsync(int id);
     }
 

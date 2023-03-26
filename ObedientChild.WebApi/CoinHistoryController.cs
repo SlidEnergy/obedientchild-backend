@@ -38,15 +38,6 @@ namespace ObedientChild.WebApi
             return item;
         }
 
-        [HttpPut]
-        public async Task Add(CoinHistory coinHistory)
-        {
-            if (ModelState.IsValid)
-            {
-                await _service.AddAsync(coinHistory);
-            }
-        }
-
         [HttpDelete("{id}")]
         public async Task Revert(int id)
         {

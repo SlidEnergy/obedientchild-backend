@@ -24,13 +24,6 @@ namespace ObedientChild.App
             return await _context.CoinHistory.FindAsync(id);
         }
 
-        public async Task AddAsync(CoinHistory deed)
-        {
-            _context.CoinHistory.Add(deed);
-
-            await _context.SaveChangesAsync();
-        }
-
         public async Task RevertAsync(int id)
         {
             var history = await _context.CoinHistory.FindAsync(id);

@@ -6,6 +6,7 @@
 		<NoWarn>$(NoWarn);1591</NoWarn>
 		<UserSecretsId>a8a412a6-0e66-4752-88e5-880beb1b562a</UserSecretsId>
 		<Nullable>enable</Nullable>
+		<ServerGarbageCollection>false</ServerGarbageCollection>
 	</PropertyGroup>
 
 	<ItemGroup>

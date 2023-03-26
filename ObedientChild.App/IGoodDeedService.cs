@@ -13,5 +13,7 @@ namespace ObedientChild.App
         Task AddAsync(GoodDeed deed);
 
         Task DeleteAsync(int id);
+
+        Task<GoodDeed> UpdateAsync(GoodDeed deed);
     }
 }

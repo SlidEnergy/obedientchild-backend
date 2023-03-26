@@ -39,11 +39,11 @@ namespace ObedientChild.WebApi
         }
 
         [HttpPut]
-        public async Task Add(GoodDeed reward)
+        public async Task Add(GoodDeed goodDeed)
         {
             if (ModelState.IsValid)
             {
-                await _service.AddAsync(reward);
+                await _service.AddAsync(goodDeed);
             }
         }
 
@@ -51,6 +51,12 @@ namespace ObedientChild.WebApi
         public async Task Delete(int id)
         {
              await _service.DeleteAsync(id);
+        }
+
+        [HttpPost("{id}")]
+        public async Task<ActionResult<GoodDeed>> Update(int id, [FromBody] GoodDeed goodDeed)
+        {
+            return await _service.UpdateAsync(goodDeed);
         }
     }
 }

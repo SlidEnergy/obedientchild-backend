@@ -22,9 +22,9 @@ namespace ObedientChild.WebApi
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<CoinHistory>>> GetList()
+        public async Task<ActionResult<IEnumerable<CoinHistory>>> GetList([FromQuery]int childId = 0)
         {
-            var list = await _service.GetListAsync();
+            var list = await _service.GetListAsync(childId);
 
             return list;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ObedientChild.Domain;
@@ -14,9 +15,14 @@ namespace ObedientChild.App
             _context = context;
         }
 
-        public async Task<List<CoinHistory>> GetListAsync()
+        public async Task<List<CoinHistory>> GetListAsync(int childId)
         {
-            return await _context.CoinHistory.ToListAsync();
+            if(childId == 0)
+                return await _context.CoinHistory.ToListAsync();
+
+            // TODO: add index by childId
+
+            return await _context.CoinHistory.Where(x => x.ChildId == childId).ToListAsync();
         }
 
         public async Task<CoinHistory> GetByIdAsync(int id)

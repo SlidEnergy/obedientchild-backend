@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,14 +30,14 @@ namespace ObedientChild.WebApi.IntegrationTests
 		/// <param name="predicate">Функция, принимающая на вход сущность как словарь свойств, и возвращающая true или false.</param>
 		public static async Task ContentIsEntity(this HttpResponseMessage response, Predicate<Dictionary<string, object>> predicate, params string[] expectedProperties)
 		{
-			Assert.IsNotNull(response.Content);
+            ClassicAssert.IsNotNull(response.Content);
 			var entity = await response.ToDictionary();
-			Assert.NotNull(entity);
+            ClassicAssert.NotNull(entity);
 
 			AssertPropertiesExists(entity, expectedProperties);
 
 			if (predicate != null)
-				Assert.IsTrue(predicate(entity));
+                ClassicAssert.IsTrue(predicate(entity));
 		}
 
 		/// <summary>
@@ -45,10 +46,10 @@ namespace ObedientChild.WebApi.IntegrationTests
 		/// <param name="predicate">Функция, принимающая на вход сущность как словарь свойств, и возвращающая true или false.</param>
 		public static async Task ContentIsArray(this HttpResponseMessage response, int length)
 		{
-			Assert.IsNotNull(response.Content);
+            ClassicAssert.IsNotNull(response.Content);
 			var array = await response.ToArray();
-			Assert.NotNull(array);
-			Assert.AreEqual(array.Length, length);
+            ClassicAssert.NotNull(array);
+            ClassicAssert.AreEqual(array.Length, length);
 		}
 
 		/// <summary>
@@ -68,14 +69,14 @@ namespace ObedientChild.WebApi.IntegrationTests
 		/// <param name="predicate">Функция, принимающая на вход сущность как словарь свойств, и возвращающая true или false.</param>
 		public static async Task ContentIsArrayOfEntity(this HttpResponseMessage response, int minLength, Func<Dictionary<string, object>, bool> predicate, params string[] expectedProperties)
 		{
-			Assert.IsNotNull(response.Content);
+            ClassicAssert.IsNotNull(response.Content);
 			var array = await response.ToArrayOfDictionaries();
-			Assert.NotNull(array);
+            ClassicAssert.NotNull(array);
 
 			if (predicate != null) {
-				Assert.GreaterOrEqual(array.Where(predicate).Count(), minLength);
+                ClassicAssert.GreaterOrEqual(array.Where(predicate).Count(), minLength);
 			} else {
-				Assert.GreaterOrEqual(array.Length, minLength);
+                ClassicAssert.GreaterOrEqual(array.Length, minLength);
 			}
 
 			foreach (var entity in array)
@@ -90,7 +91,7 @@ namespace ObedientChild.WebApi.IntegrationTests
 		private static void AssertPropertiesExists(Dictionary<string, object> entity, string[] expectedProperties)
 		{
 			foreach (var prop in expectedProperties)
-				Assert.IsTrue(entity.ContainsKey(prop));
+                ClassicAssert.IsTrue(entity.ContainsKey(prop));
 		}
 	}
 }

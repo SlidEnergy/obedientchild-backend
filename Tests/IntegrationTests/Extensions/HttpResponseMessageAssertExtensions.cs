@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Net;
 using System.Net.Http;
 
@@ -14,8 +15,8 @@ namespace ObedientChild.WebApi.IntegrationTests
 		/// </summary>
 		public static void IsBadRequest(this HttpResponseMessage response)
 		{
-			Assert.IsNotNull(response);
-			Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+			Assert.That(response, Is.Not.Null);
+			Assert.That(HttpStatusCode.BadRequest, Is.EqualTo(response.StatusCode));
 		}
 
 		/// <summary>
@@ -23,8 +24,8 @@ namespace ObedientChild.WebApi.IntegrationTests
 		/// </summary>
 		public static void IsNotFound(this HttpResponseMessage response)
 		{
-			Assert.IsNotNull(response);
-			Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+			ClassicAssert.IsNotNull(response);
+            ClassicAssert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 		}
 
 		/// <summary>
@@ -32,8 +33,8 @@ namespace ObedientChild.WebApi.IntegrationTests
 		/// </summary>
 		public static void IsUnauthorized(this HttpResponseMessage response)
 		{
-			Assert.IsNotNull(response);
-			Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+            ClassicAssert.IsNotNull(response);
+            ClassicAssert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
 		}
 
 		/// <summary>
@@ -41,8 +42,8 @@ namespace ObedientChild.WebApi.IntegrationTests
 		/// </summary>
 		public static void IsSuccess(this HttpResponseMessage response)
 		{
-			Assert.IsNotNull(response);
-			Assert.IsTrue(response.IsSuccessStatusCode);
+            ClassicAssert.IsNotNull(response);
+            ClassicAssert.IsTrue(response.IsSuccessStatusCode);
 		}
 	}
 }

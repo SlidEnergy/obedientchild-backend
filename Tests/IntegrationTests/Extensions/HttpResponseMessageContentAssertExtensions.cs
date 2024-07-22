@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ObedientChild.WebApi.IntegrationTests
 {
-	/// <summary>
-	/// Методы расширения для класса HttpResponseMessage проверяющие содержимое ответа.
-	/// </summary>
-	public static class HttpResponseMessageContentAssertExtensions
+    /// <summary>
+    /// Методы расширения для класса HttpResponseMessage проверяющие содержимое ответа.
+    /// </summary>
+    public static class HttpResponseMessageContentAssertExtensions
 	{
 		/// <summary>
 		/// Проверяет, содержит ли ответ сущность с идентификатором.
@@ -30,14 +29,14 @@ namespace ObedientChild.WebApi.IntegrationTests
 		/// <param name="predicate">Функция, принимающая на вход сущность как словарь свойств, и возвращающая true или false.</param>
 		public static async Task ContentIsEntity(this HttpResponseMessage response, Predicate<Dictionary<string, object>> predicate, params string[] expectedProperties)
 		{
-            ClassicAssert.IsNotNull(response.Content);
+            Assert.That(response.Content, Is.Not.Null);
 			var entity = await response.ToDictionary();
-            ClassicAssert.NotNull(entity);
+            Assert.That(entity, Is.Not.Null);
 
 			AssertPropertiesExists(entity, expectedProperties);
 
 			if (predicate != null)
-                ClassicAssert.IsTrue(predicate(entity));
+                Assert.That(predicate(entity), Is.True);
 		}
 
 		/// <summary>
@@ -46,10 +45,10 @@ namespace ObedientChild.WebApi.IntegrationTests
 		/// <param name="predicate">Функция, принимающая на вход сущность как словарь свойств, и возвращающая true или false.</param>
 		public static async Task ContentIsArray(this HttpResponseMessage response, int length)
 		{
-            ClassicAssert.IsNotNull(response.Content);
+            Assert.That(response.Content, Is.Not.Null);
 			var array = await response.ToArray();
-            ClassicAssert.NotNull(array);
-            ClassicAssert.AreEqual(array.Length, length);
+            Assert.That(array, Is.Not.Null);
+            Assert.That(array.Length, Is.EqualTo(length));
 		}
 
 		/// <summary>
@@ -69,14 +68,14 @@ namespace ObedientChild.WebApi.IntegrationTests
 		/// <param name="predicate">Функция, принимающая на вход сущность как словарь свойств, и возвращающая true или false.</param>
 		public static async Task ContentIsArrayOfEntity(this HttpResponseMessage response, int minLength, Func<Dictionary<string, object>, bool> predicate, params string[] expectedProperties)
 		{
-            ClassicAssert.IsNotNull(response.Content);
+            Assert.That(response.Content, Is.Not.Null);
 			var array = await response.ToArrayOfDictionaries();
-            ClassicAssert.NotNull(array);
+            Assert.That(array, Is.Not.Null);
 
 			if (predicate != null) {
-                ClassicAssert.GreaterOrEqual(array.Where(predicate).Count(), minLength);
+                Assert.That(array.Where(predicate).Count(), Is.GreaterThanOrEqualTo(minLength));
 			} else {
-                ClassicAssert.GreaterOrEqual(array.Length, minLength);
+                Assert.That(array.Length, Is.GreaterThanOrEqualTo(minLength));
 			}
 
 			foreach (var entity in array)
@@ -91,7 +90,7 @@ namespace ObedientChild.WebApi.IntegrationTests
 		private static void AssertPropertiesExists(Dictionary<string, object> entity, string[] expectedProperties)
 		{
 			foreach (var prop in expectedProperties)
-                ClassicAssert.IsTrue(entity.ContainsKey(prop));
+                Assert.That(entity.ContainsKey(prop), Is.True);
 		}
 	}
 }

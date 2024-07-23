@@ -14,9 +14,9 @@ namespace ObedientChild.WebApi.Auth
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IClaimsGenerator _claimsGenerator;
 
-		public ApiKeyProvider(IUsersService usersService, UserManager<ApplicationUser> userManager, IClaimsGenerator claimsGenerator)
+		public ApiKeyProvider(ILogger<ApiKeyProvider> logger, IUsersService usersService, UserManager<ApplicationUser> userManager, IClaimsGenerator claimsGenerator)
 		{
-			//_logger = logger;
+			_logger = logger;
 			_usersService = usersService;
 			_userManager = userManager;
 			_claimsGenerator = claimsGenerator;

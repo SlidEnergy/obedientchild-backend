@@ -196,11 +196,12 @@ namespace ObedientChild.WebApi
                     };
                     // options.SaveToken = true;
                 })
-                .AddApiKeyInQueryParams<Auth.ApiKeyProvider>(options =>
-                {
-                    options.Realm = "ObedientChild";
-                    options.KeyName = "api_key";
-                });
+                //.AddApiKeyInQueryParams<Auth.ApiKeyProvider>(options =>
+                //{
+                //    options.Realm = "ObedientChild";
+                //    options.KeyName = "api_key";
+                //})
+                ;
         }
 
         private void ConfigureAutoMapper(IServiceCollection services)

@@ -13,7 +13,6 @@ namespace ObedientChild.UnitTests
 
             var user = new ApplicationUser()
             {
-                Trustee = new Trustee(),
                 Email = email,
                 UserName = email
             };

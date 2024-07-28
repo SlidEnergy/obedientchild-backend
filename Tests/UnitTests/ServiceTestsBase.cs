@@ -41,7 +41,6 @@ namespace ObedientChild.UnitTests
 			var email = Guid.NewGuid() + "@mail.com";
 			_user = new ApplicationUser()
             {
-                Trustee = new Trustee(),
                 Email = email,
                 UserName = email
             };

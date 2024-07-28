@@ -67,7 +67,6 @@ namespace ObedientChild.WebApi.IntegrationTests
 		{
 			var user = new ApplicationUser()
             {
-                Trustee = new Trustee(),
                 Email = email,
                 UserName = email
             };

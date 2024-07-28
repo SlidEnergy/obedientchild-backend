@@ -94,7 +94,6 @@ namespace ObedientChild.Infrastucture
 			_logger.LogInformation($"Create default user with email `{email}` for application");
 			var user = new ApplicationUser()
             {
-                Trustee = new Trustee(),
                 Email = email,
                 UserName = email
             };

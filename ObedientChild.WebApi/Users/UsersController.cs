@@ -71,7 +71,6 @@ namespace ObedientChild.WebApi
 
 			var user = new ApplicationUser()
             {
-                Trustee = new Trustee(),
                 Email = model.Email,
                 UserName = model.Email
             };

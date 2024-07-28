@@ -23,7 +23,7 @@ namespace ObedientChild.App
 
 			if (existToken == null || existToken.Type != AuthTokenType.TelegramUserId || existToken.UserId != user.Id)
 			{
-				await _dal.AuthTokens.Add(new AuthToken("any", token, user, type));
+				await _dal.AuthTokens.Add(new AuthToken("any", token, type) { User = user});
 			}
 		}
 

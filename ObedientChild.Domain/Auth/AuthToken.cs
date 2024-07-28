@@ -28,12 +28,11 @@ namespace ObedientChild.Domain
 
 		public AuthToken() { }
 
-		public AuthToken(string deviceId, string token, ApplicationUser user, AuthTokenType type)
+		public AuthToken(string deviceId, string token, AuthTokenType type)
 		{
 			DeviceId = deviceId;
 			Token = token;
 			ExpirationDate = DateTime.SpecifyKind(DateTime.Today.AddYears(10), DateTimeKind.Utc);
-			User = user;
 			Type = type;
 		}
 

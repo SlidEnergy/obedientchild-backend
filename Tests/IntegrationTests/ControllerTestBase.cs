@@ -64,7 +64,7 @@ namespace ObedientChild.WebApi.IntegrationTests
 
 		protected virtual async Task<ApplicationUser> CreateUser(string email, string password)
 		{
-			var user = new ApplicationUser(new Trustee(), email);
+			var user = new ApplicationUser(email);
 			var result = await _manager.CreateAsync(user, password);
 
 			if (!result.Succeeded)

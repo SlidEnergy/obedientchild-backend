@@ -35,11 +35,11 @@ namespace ObedientChild.UnitTests
 			var role = new IdentityRole() { Name = Role.Admin };
 			_db.Roles.Add(role);
 
-			var trustee = new Trustee();
-			_db.Trustee.Add(trustee);
+			//var trustee = new Trustee();
+			//_db.Trustee.Add(trustee);
 
 			var userName = Guid.NewGuid() + "@mail.com";
-			_user = new ApplicationUser(trustee, userName);
+			_user = new ApplicationUser(userName);
 			_db.Users.Add(_user);
 			
 			_db.UserRoles.Add(new IdentityUserRole<string>() { RoleId = role.Id, UserId = _user.Id });

@@ -20,9 +20,9 @@ namespace ObedientChild.Domain
 
         }
 
-        public ApplicationUser(Trustee trustee, string email) : this(trustee.Id, email)
+        public ApplicationUser(string email) : this(0, email)
         {
-            Trustee = trustee;
+            Trustee = new Trustee();
         }
 
         public ApplicationUser(int trusteeId, string email)

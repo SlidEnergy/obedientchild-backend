@@ -68,7 +68,7 @@ namespace ObedientChild.WebApi
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			var user = new ApplicationUser(new Trustee(), model.Email);
+			var user = new ApplicationUser(model.Email);
 
             var result = await _usersService.CreateUserAsync(user, model.Password);
 

@@ -11,7 +11,14 @@ namespace ObedientChild.UnitTests
 	{
 		public static async Task<ApplicationUser> CreateUser(this ApplicationDbContext db)
 		{
-			var user = new ApplicationUser(Guid.NewGuid().ToString());
+			var email = Guid.NewGuid().ToString();
+
+            var user = new ApplicationUser()
+            {
+                Trustee = new Trustee(),
+                Email = email,
+                UserName = email
+            };
 			db.Users.Add(user);
 			await db.SaveChangesAsync();
 

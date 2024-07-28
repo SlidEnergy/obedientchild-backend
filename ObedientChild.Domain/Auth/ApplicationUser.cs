@@ -20,12 +20,6 @@ namespace ObedientChild.Domain
 
         }
 
-        public ApplicationUser(string email)
-        {
-            Trustee = new Trustee();
-            Email = UserName = email;
-        }
-
         public override string ToString()
         {
             return $"{FirstName} {LastName} {MiddleName}";

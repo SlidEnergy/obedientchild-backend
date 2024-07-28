@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Slid.Auth.Core;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace ObedientChild.WebApi
 {
@@ -68,7 +69,12 @@ namespace ObedientChild.WebApi
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			var user = new ApplicationUser(model.Email);
+			var user = new ApplicationUser()
+            {
+                Trustee = new Trustee(),
+                Email = model.Email,
+                UserName = model.Email
+            };
 
             var result = await _usersService.CreateUserAsync(user, model.Password);
 

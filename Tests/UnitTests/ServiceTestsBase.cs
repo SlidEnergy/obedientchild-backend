@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ObedientChild.Domain;
 using Microsoft.AspNetCore.Identity;
 using System;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace ObedientChild.UnitTests
 {
@@ -38,8 +39,13 @@ namespace ObedientChild.UnitTests
 			//var trustee = new Trustee();
 			//_db.Trustee.Add(trustee);
 
-			var userName = Guid.NewGuid() + "@mail.com";
-			_user = new ApplicationUser(userName);
+			var email = Guid.NewGuid() + "@mail.com";
+			_user = new ApplicationUser()
+            {
+                Trustee = new Trustee(),
+                Email = email,
+                UserName = email
+            };
 			_db.Users.Add(_user);
 			
 			_db.UserRoles.Add(new IdentityUserRole<string>() { RoleId = role.Id, UserId = _user.Id });

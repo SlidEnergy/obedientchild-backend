@@ -1,17 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Moq;
-using ObedientChild.App;
-using ObedientChild.Infrastructure;
 using NUnit.Framework;
-using System.Threading.Tasks;
+using ObedientChild.App;
 using ObedientChild.Domain;
-using Microsoft.AspNetCore.Identity;
+using ObedientChild.Infrastructure;
 using System;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.Threading.Tasks;
 
 namespace ObedientChild.UnitTests
 {
-	public class TestsBase
+    public class TestsBase
 	{
 		protected readonly AutoMapperFactory _autoMapper = new AutoMapperFactory();
 		protected ApplicationDbContext _db;

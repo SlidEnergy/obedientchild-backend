@@ -1,13 +1,11 @@
 ﻿using ObedientChild.Domain;
 using ObedientChild.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ObedientChild.UnitTests
 {
-	public static class EntityFactoryExtensions
+    public static class EntityFactoryExtensions
 	{
 		public static async Task<ApplicationUser> CreateUser(this ApplicationDbContext db)
 		{

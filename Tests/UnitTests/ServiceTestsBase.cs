@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Moq;
-using NUnit.Framework;
 using ObedientChild.App;
-using ObedientChild.Domain;
 using ObedientChild.Infrastructure;
-using System;
+using NUnit.Framework;
 using System.Threading.Tasks;
+using ObedientChild.Domain;
+using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace ObedientChild.UnitTests
 {
-    public class TestsBase
+	public class TestsBase
 	{
 		protected readonly AutoMapperFactory _autoMapper = new AutoMapperFactory();
 		protected ApplicationDbContext _db;
@@ -38,12 +38,8 @@ namespace ObedientChild.UnitTests
 			//var trustee = new Trustee();
 			//_db.Trustee.Add(trustee);
 
-			var email = Guid.NewGuid() + "@mail.com";
-			_user = new ApplicationUser()
-            {
-                Email = email,
-                UserName = email
-            };
+			var userName = Guid.NewGuid() + "@mail.com";
+			_user = new ApplicationUser(userName);
 			_db.Users.Add(_user);
 			
 			_db.UserRoles.Add(new IdentityUserRole<string>() { RoleId = role.Id, UserId = _user.Id });

@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using ObedientChild.Domain;
+﻿using ObedientChild.Domain;
 using ObedientChild.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -12,13 +11,7 @@ namespace ObedientChild.WebApi.IntegrationTests
 	{
 		public static async Task<ApplicationUser> CreateUser(this ApplicationDbContext db)
 		{
-			var email = Guid.NewGuid().ToString();
-
-            var user = new ApplicationUser()
-            {
-                Email = email,
-                UserName = email
-            };
+			var user = new ApplicationUser(Guid.NewGuid().ToString());
 			db.Users.Add(user);
 			await db.SaveChangesAsync();
 

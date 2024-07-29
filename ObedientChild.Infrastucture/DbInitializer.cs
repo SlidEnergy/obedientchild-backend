@@ -92,11 +92,7 @@ namespace ObedientChild.Infrastucture
 		private async Task<ApplicationUser> CreateDefaultUser(string email)
 		{
 			_logger.LogInformation($"Create default user with email `{email}` for application");
-			var user = new ApplicationUser()
-            {
-                Email = email,
-                UserName = email
-            };
+			var user = new ApplicationUser(email);
 
 			var result = await _userManager.CreateAsync(user);
 			if (result.Succeeded)

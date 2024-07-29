@@ -6,6 +6,8 @@ namespace ObedientChild.Domain
     public class ApplicationUser : IdentityUser, IUniqueObject<string>
     {
         public int TrusteeId { get; set; }
+        [Required]
+        public virtual Trustee Trustee { get; set; }
 
         public string FirstName { get; set; }
 
@@ -15,7 +17,13 @@ namespace ObedientChild.Domain
 
         public ApplicationUser()
         {
-            TrusteeId = 1;
+
+        }
+
+        public ApplicationUser(string email)
+        {
+            Trustee = new Trustee();
+            Email = UserName = email;
         }
 
         public override string ToString()

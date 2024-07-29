@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace ObedientChild.UnitTests
 {
-    public static class RandomGenerator
+	public static class RandomGenerator
 	{
 		public static int GenerateMcc()
 		{

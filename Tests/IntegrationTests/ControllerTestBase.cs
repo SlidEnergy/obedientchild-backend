@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using NUnit.Framework;
 using ObedientChild.App;
 using ObedientChild.Domain;
@@ -65,12 +64,8 @@ namespace ObedientChild.WebApi.IntegrationTests
 
 		protected virtual async Task<ApplicationUser> CreateUser(string email, string password)
 		{
-			var user = new ApplicationUser()
-            {
-                Email = email,
-                UserName = email
-            };
-            var result = await _manager.CreateAsync(user, password);
+			var user = new ApplicationUser(email);
+			var result = await _manager.CreateAsync(user, password);
 
 			if (!result.Succeeded)
 				throw new Exception("Новый пользователь не создан. " + Lers.Utils.ArrayUtils.JoinToString(result.Errors.Select(x => x.Description), ", "));

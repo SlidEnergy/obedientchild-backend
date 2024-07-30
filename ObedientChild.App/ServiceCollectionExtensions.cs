@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using ObedientChild.App.Habbits;
 
 namespace ObedientChild.App
 {
@@ -14,6 +15,7 @@ namespace ObedientChild.App
 			services.AddScoped<IBadDeedService, BadDeedService>();
 			services.AddScoped<ICoinHistoryService, CoinHistoryService>();
 			services.AddScoped<ICoinHistoryFactory, CoinHistoryFactory>();
+			services.AddScoped<IHabbitsService, HabbitsService>();
 
 			return services;
 		}

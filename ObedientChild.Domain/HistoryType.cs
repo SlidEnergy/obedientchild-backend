@@ -4,6 +4,7 @@
     {
         Manual,
         GoodDeed,
-        BadDeed
+        BadDeed,
+        Habbit
     }
 }

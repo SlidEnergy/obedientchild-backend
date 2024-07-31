@@ -1,14 +1,14 @@
 ﻿using ObedientChild.Domain;
-using ObedientChild.Domain.Habbits;
+using ObedientChild.Domain.Habits;
 using System;
 
-namespace ObedientChild.App.Habbits
+namespace ObedientChild.App.Habits
 {
-    public class DayHabbit
+    public class DayHabit
     {
         public DateOnly Day { get; set; }
 
-        public int HabbitId => _model.Id;
+        public int HabitId => _model.Id;
 
         public string Title => _model.Title;
 
@@ -16,11 +16,11 @@ namespace ObedientChild.App.Habbits
 
         public string ImageUrl => _model.ImageUrl;
 
-        public HabbitHistoryStatus Status { get; set; }
+        public HabitHistoryStatus Status { get; set; }
 
-        private Habbit _model;
+        private Habit _model;
 
-        public DayHabbit(DateOnly day, Habbit model, HabbitHistoryStatus status)
+        public DayHabit(DateOnly day, Habit model, HabitHistoryStatus status)
         {
             Day = day;
             _model = model;

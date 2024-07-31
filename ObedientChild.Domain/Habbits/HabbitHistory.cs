@@ -2,28 +2,28 @@
 
 namespace ObedientChild.Domain
 {
-    public class HabbitHistory
+    public class HabitHistory
     {
         public int Id { get; set; }
 
         public int ChildId { get; set; }
 
-        public int HabbitId { get; set; }
+        public int HabitId { get; set; }
 
-        public HabbitHistoryStatus Status { get; set; }
+        public HabitHistoryStatus Status { get; set; }
 
         public DateOnly Day { get; set; }
 
-        public HabbitHistory()
+        public HabitHistory()
         {
 
         }
 
-        public HabbitHistory(DateOnly day, int childId, int habbitId, HabbitHistoryStatus status)
+        public HabitHistory(DateOnly day, int childId, int habitId, HabitHistoryStatus status)
         {
             Day = day;
             ChildId = childId;
-            HabbitId = habbitId;
+            HabitId = habitId;
             Status = status;
         }
     }

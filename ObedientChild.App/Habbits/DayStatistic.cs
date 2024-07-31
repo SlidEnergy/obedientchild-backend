@@ -1,17 +1,17 @@
 ﻿using System;
 
-namespace ObedientChild.App.Habbits
+namespace ObedientChild.App.Habits
 {
     public class DayStatistic
     {
         public DateOnly Day { get; set; }
 
-        public int HabbitsCount { get; set; }
+        public int HabitsCount { get; set; }
 
-        public int DoneHabbitsCount { get; set; }
+        public int DoneHabitsCount { get; set; }
 
-        public int SkippedHabbitsCount { get; set; }
+        public int SkippedHabitsCount { get; set; }
 
-        public float DayPercent => HabbitsCount == 0 ? 0 : (float)(DoneHabbitsCount + SkippedHabbitsCount) / (float)HabbitsCount;
+        public float DayPercent => HabitsCount == 0 ? 0 : (float)(DoneHabitsCount + SkippedHabitsCount) / (float)HabitsCount;
     }
 }

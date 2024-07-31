@@ -4,7 +4,7 @@ using ObedientChild.Domain;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using ObedientChild.Domain.Habbits;
+using ObedientChild.Domain.Habits;
 
 namespace ObedientChild.App
 {
@@ -24,13 +24,13 @@ namespace ObedientChild.App
 
         DbSet<GoodDeed> GoodDeeds { get; set; }
 
-        DbSet<Habbit> Habbits { get; set; }
+        DbSet<Habit> Habits { get; set; }
 
         DbSet<BadDeed> BadDeeds { get; set; }
 
 		DbSet<CoinHistory> CoinHistory { get; set; }
-		DbSet<HabbitHistory> HabbitHistory { get; set; }
-		DbSet<ChildHabbit> ChildHabbits { get; set; }
+		DbSet<HabitHistory> HabitHistory { get; set; }
+		DbSet<ChildHabit> ChildHabits { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ObedientChild.Domain
 {
-    public enum HabbitHistoryStatus
+    public enum HabitHistoryStatus : int
     {
         None = 0,
         Done = 1,
-        Skpped = 2,
+        Skipped = 2,
     }
 }

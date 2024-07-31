@@ -12,8 +12,8 @@ using ObedientChild.Infrastructure;
 namespace ObedientChild.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240730104707_AddHabbits")]
-    partial class AddHabbits
+    [Migration("20240731071427_AddHabit")]
+    partial class AddHabit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -385,7 +385,7 @@ namespace ObedientChild.Infrastructure.Migrations
                     b.ToTable("GoodDeeds");
                 });
 
-            modelBuilder.Entity("ObedientChild.Domain.HabbitHistory", b =>
+            modelBuilder.Entity("ObedientChild.Domain.HabitHistory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -399,7 +399,7 @@ namespace ObedientChild.Infrastructure.Migrations
                     b.Property<DateOnly>("Day")
                         .HasColumnType("date");
 
-                    b.Property<int>("HabbitId")
+                    b.Property<int>("HabitId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
@@ -407,12 +407,12 @@ namespace ObedientChild.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HabbitHistory");
+                    b.ToTable("HabitHistory");
                 });
 
-            modelBuilder.Entity("ObedientChild.Domain.Habbits.ChildHabbit", b =>
+            modelBuilder.Entity("ObedientChild.Domain.Habits.ChildHabit", b =>
                 {
-                    b.Property<int>("HabbitId")
+                    b.Property<int>("HabitId")
                         .HasColumnType("integer");
 
                     b.Property<int>("ChildId")
@@ -424,12 +424,12 @@ namespace ObedientChild.Infrastructure.Migrations
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
-                    b.HasKey("HabbitId", "ChildId");
+                    b.HasKey("HabitId", "ChildId");
 
-                    b.ToTable("ChildHabbits");
+                    b.ToTable("ChildHabits");
                 });
 
-            modelBuilder.Entity("ObedientChild.Domain.Habbits.Habbit", b =>
+            modelBuilder.Entity("ObedientChild.Domain.Habits.Habit", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -450,7 +450,7 @@ namespace ObedientChild.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Habbits");
+                    b.ToTable("Habits");
                 });
 
             modelBuilder.Entity("ObedientChild.Domain.Reward", b =>

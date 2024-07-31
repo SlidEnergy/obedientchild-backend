@@ -4,58 +4,58 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ObedientChild.Domain;
-using ObedientChild.Domain.Habbits;
+using ObedientChild.Domain.Habits;
 
-namespace ObedientChild.App.Habbits
+namespace ObedientChild.App.Habits
 {
-    public class HabbitsService : IHabbitsService
+    public class HabitsService : IHabitsService
     {
         private readonly IApplicationDbContext _context;
         private readonly ICoinHistoryFactory _historyFactory;
 
-        public HabbitsService(IApplicationDbContext context, ICoinHistoryFactory historyFactory)
+        public HabitsService(IApplicationDbContext context, ICoinHistoryFactory historyFactory)
         {
             _context = context;
             _historyFactory = historyFactory;
         }
 
-        public async Task<List<Habbit>> GetListAsync()
+        public async Task<List<Habit>> GetListAsync()
         {
-            return await _context.Habbits.ToListAsync();
+            return await _context.Habits.ToListAsync();
         }
 
-        public async Task<List<DayHabbit>> GetListForDayAsync(int childId, DateOnly day)
+        public async Task<List<DayHabit>> GetListForDayAsync(int childId, DateOnly day)
         {
-            var habbits = await _context.ChildHabbits
+            var habits = await _context.ChildHabits
                 .Where(x => x.ChildId == childId && day >= x.StartDate && x.EndDate == null)
-                .Join(_context.Habbits, ch => ch.HabbitId, h => h.Id, (ch, h) => h)
-                .Select(x => new DayHabbit(day, x, HabbitHistoryStatus.None))
+                .Join(_context.Habits, ch => ch.HabitId, h => h.Id, (ch, h) => h)
+                .Select(x => new DayHabit(day, x, HabitHistoryStatus.None))
                 .ToListAsync();
 
-            var history = await _context.HabbitHistory
+            var history = await _context.HabitHistory
                 .Where(x => x.ChildId == childId && x.Day == day)
-                .Join(_context.Habbits, hh => hh.HabbitId, h => h.Id, (hh, h) => new { HabbitHistory = hh, Habbit = h })
-                .Select(x => new DayHabbit(day, x.Habbit, x.HabbitHistory.Status))
+                .Join(_context.Habits, hh => hh.HabitId, h => h.Id, (hh, h) => new { HabitHistory = hh, Habit = h })
+                .Select(x => new DayHabit(day, x.Habit, x.HabitHistory.Status))
                 .ToListAsync();
 
-            return history.UnionBy(habbits, x => x.HabbitId).ToList();
+            return history.UnionBy(habits, x => x.HabitId).ToList();
         }
 
-        public async Task<Habbit> GetByIdAsync(int id)
+        public async Task<Habit> GetByIdAsync(int id)
         {
-            return await _context.Habbits.FindAsync(id);
+            return await _context.Habits.FindAsync(id);
         }
 
-        public async Task AddAsync(Habbit model)
+        public async Task AddAsync(Habit model)
         {
-            _context.Habbits.Add(model);
+            _context.Habits.Add(model);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task SetForChildAsync(int childId, int habbitId)
+        public async Task SetForChildAsync(int childId, int habitId)
         {
-            var model = await _context.ChildHabbits.FirstOrDefaultAsync(x => x.HabbitId == habbitId && x.ChildId == childId);
+            var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.HabitId == habitId && x.ChildId == childId);
 
             if (model != null)
             {
@@ -63,96 +63,103 @@ namespace ObedientChild.App.Habbits
             }
             else
             {
-                _context.ChildHabbits.Add(new ChildHabbit(childId, habbitId));
+                _context.ChildHabits.Add(new ChildHabit(childId, habitId));
             }
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task UnsetForChildAsync(int id, int childId)
+        public async Task UnsetForChildAsync(int id, int childId, DateOnly day)
         {
-            var model = await _context.ChildHabbits.FirstOrDefaultAsync(x => x.HabbitId == id && x.ChildId == childId);
+            var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.HabitId == id && x.ChildId == childId);
 
             if (model != null)
             {
-                model.EndDate = DateOnly.FromDateTime(DateTime.Today);
-
-                await _context.SaveChangesAsync();
+                model.EndDate = day;
             }
+
+            var history = await _context.HabitHistory.FirstOrDefaultAsync(x => x.Day == day && x.HabitId == id && x.ChildId == childId);
+
+            if (history != null)
+            {
+                _context.HabitHistory.Remove(history);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var model = await _context.Habbits.FindAsync(id);
+            var model = await _context.Habits.FindAsync(id);
 
             if (model != null)
             {
-                _context.Habbits.Remove(model);
+                _context.Habits.Remove(model);
                 await _context.SaveChangesAsync();
             }
         }
 
-        public async Task<HabbitHistory> SetStatusAsync(int habbitId, int childId, DateOnly day, HabbitHistoryStatus status)
+        public async Task<HabitHistory> SetStatusAsync(int habitId, int childId, DateOnly day, HabitHistoryStatus status)
         {
-            var habbit = await _context.Habbits.FirstOrDefaultAsync(x => x.Id == habbitId);
+            var habit = await _context.Habits.FirstOrDefaultAsync(x => x.Id == habitId);
 
-            if (habbit == null)
+            if (habit == null)
                 return null;
 
-            var habbitHistory = await _context.HabbitHistory.FirstOrDefaultAsync(x => x.HabbitId == habbitId && x.ChildId == childId && x.Day == day);
+            var habitHistory = await _context.HabitHistory.FirstOrDefaultAsync(x => x.HabitId == habitId && x.ChildId == childId && x.Day == day);
 
             // update or remove entry
-            if (habbitHistory != null)
+            if (habitHistory != null)
             {
-                if (status == HabbitHistoryStatus.None)
+                if (status == HabitHistoryStatus.None)
                 {
-                    var coinHistory = _historyFactory.CreateSpendHabbit(childId, habbit);
+                    var coinHistory = _historyFactory.CreateSpendHabit(childId, habit);
                     _context.CoinHistory.Add(coinHistory);
 
-                    _context.HabbitHistory.Remove(habbitHistory);
+                    _context.HabitHistory.Remove(habitHistory);
                     await _context.SaveChangesAsync();
 
                     return null;
                 }
-                else if (habbitHistory.Status != status)
+                else if (habitHistory.Status != status)
                 {
-                    if (status == HabbitHistoryStatus.Done)
+                    if (status == HabitHistoryStatus.Done)
                     {
-                        var coinHistory = _historyFactory.CreateEarnHabbit(childId, habbit);
+                        var coinHistory = _historyFactory.CreateEarnHabit(childId, habit);
                         _context.CoinHistory.Add(coinHistory);
                     }
 
-                    habbitHistory.Status = status;
+                    habitHistory.Status = status;
                     await _context.SaveChangesAsync();
 
-                    return habbitHistory;
+                    return habitHistory;
                 }
             }
             // create entry
             else
             {
-                var model = await _context.ChildHabbits.FirstOrDefaultAsync(x => x.HabbitId == habbitId && x.ChildId == childId);
+                var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.HabitId == habitId && x.ChildId == childId);
 
                 if (model != null)
                 {
-                    if (status == HabbitHistoryStatus.None)
+                    if (status == HabitHistoryStatus.None)
                         return null;
 
-                    var coinHistory = _historyFactory.CreateEarnHabbit(childId, habbit);
+                    var coinHistory = _historyFactory.CreateEarnHabit(childId, habit);
                     _context.CoinHistory.Add(coinHistory);
 
-                    var newHabbitHistory = new HabbitHistory(day, childId, habbitId, status);
-                    _context.HabbitHistory.Add(newHabbitHistory);
+                    var newHabitHistory = new HabitHistory(day, childId, habitId, status);
+                    _context.HabitHistory.Add(newHabitHistory);
                     await _context.SaveChangesAsync();
                     
-                    return newHabbitHistory;
+                    return newHabitHistory;
                 }
             }
 
             return null;
         }
 
-        public async Task<Habbit> UpdateAsync(Habbit model)
+        public async Task<Habit> UpdateAsync(Habit model)
         {
             _context.Entry(model).State = EntityState.Modified;
 
@@ -161,45 +168,45 @@ namespace ObedientChild.App.Habbits
             return model;
         }
 
-        public async Task<WeekHabbitStatistic> GetStatisticsAsync(int childId, DateOnly startDay, DateOnly endDay)
+        public async Task<WeekHabitStatistic> GetStatisticsAsync(int childId, DateOnly startDay, DateOnly endDay)
         {
-            var result = new WeekHabbitStatistic();
+            var result = new WeekHabitStatistic();
 
-            int totalHabbits = 0;
+            int totalHabits = 0;
             int totalSkipped = 0;
             int totalDone = 0;
 
             DateOnly day = startDay;
             while (day <= endDay)
             {
-                var habbitsCount = await _context.ChildHabbits
+                var habitsCount = await _context.ChildHabits
                    .Where(x => x.ChildId == childId && day >= x.StartDate && x.EndDate == null)
                    .CountAsync();
 
-                var history = await _context.HabbitHistory
+                var history = await _context.HabitHistory
                     .Where(x => x.ChildId == childId && x.Day == day)
                     .ToListAsync();
 
                 var dayStatistic = new DayStatistic()
                 {
                     Day = day,
-                    HabbitsCount = habbitsCount,
-                    DoneHabbitsCount = history.Count(x => x.Status == HabbitHistoryStatus.Done),
-                    SkippedHabbitsCount = history.Count(x => x.Status == HabbitHistoryStatus.Skpped),
+                    HabitsCount = habitsCount,
+                    DoneHabitsCount = history.Count(x => x.Status == HabitHistoryStatus.Done),
+                    SkippedHabitsCount = history.Count(x => x.Status == HabitHistoryStatus.Skipped),
                 };
 
                 result.DayStatistics.Add(dayStatistic);
 
-                totalHabbits += habbitsCount;
-                totalDone += dayStatistic.DoneHabbitsCount;
-                totalSkipped += dayStatistic.SkippedHabbitsCount;
+                totalHabits += habitsCount;
+                totalDone += dayStatistic.DoneHabitsCount;
+                totalSkipped += dayStatistic.SkippedHabitsCount;
 
                 day = day.AddDays(1);
             }
 
-            result.HabbitsCount = totalHabbits; 
-            result.DoneHabbitsCount = totalDone; 
-            result.SkippedHabbitsCount = totalSkipped; 
+            result.HabitsCount = totalHabits; 
+            result.DoneHabitsCount = totalDone; 
+            result.SkippedHabitsCount = totalSkipped; 
 
             return result;
         }

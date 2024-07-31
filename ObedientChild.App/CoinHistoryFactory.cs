@@ -1,5 +1,5 @@
 ﻿using ObedientChild.Domain;
-using ObedientChild.Domain.Habbits;
+using ObedientChild.Domain.Habits;
 using System;
 
 namespace ObedientChild.App
@@ -56,29 +56,29 @@ namespace ObedientChild.App
             };
         }
 
-        public CoinHistory CreateEarnHabbit(int childId, Habbit habbit)
+        public CoinHistory CreateEarnHabit(int childId, Habit habit)
         {
             return new CoinHistory()
             {
-                Amount = habbit.Price,
+                Amount = habit.Price,
                 ChildId = childId,
                 DateTime = DateTime.UtcNow,
-                Title = habbit.Title,
-                Type = HistoryType.Habbit,
-                ImageUrl = habbit.ImageUrl
+                Title = habit.Title,
+                Type = HistoryType.Habit,
+                ImageUrl = habit.ImageUrl
             };
         }
 
-        public CoinHistory CreateSpendHabbit(int childId, Habbit habbit)
+        public CoinHistory CreateSpendHabit(int childId, Habit habit)
         {
             return new CoinHistory()
             {
-                Amount = -habbit.Price,
+                Amount = -habit.Price,
                 ChildId = childId,
                 DateTime = DateTime.UtcNow,
-                Title = habbit.Title,
-                Type = HistoryType.Habbit,
-                ImageUrl = habbit.ImageUrl
+                Title = habit.Title,
+                Type = HistoryType.Habit,
+                ImageUrl = habit.ImageUrl
             };
         }
     }

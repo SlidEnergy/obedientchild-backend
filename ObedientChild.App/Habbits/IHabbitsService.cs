@@ -1,23 +1,23 @@
 ﻿using ObedientChild.Domain;
-using ObedientChild.Domain.Habbits;
+using ObedientChild.Domain.Habits;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ObedientChild.App.Habbits
+namespace ObedientChild.App.Habits
 {
-    public interface IHabbitsService
+    public interface IHabitsService
     {
-        Task AddAsync(Habbit model);
-        Task SetForChildAsync(int childId, int habbitId);
-        Task UnsetForChildAsync(int id, int childId);
+        Task AddAsync(Habit model);
+        Task SetForChildAsync(int childId, int habitId);
+        Task UnsetForChildAsync(int id, int childId, DateOnly day);
         Task DeleteAsync(int id);
-        Task<Habbit> GetByIdAsync(int id);
-        Task<List<Habbit>> GetListAsync();
-        Task<List<DayHabbit>> GetListForDayAsync(int childId, DateOnly day);
-        Task<Habbit> UpdateAsync(Habbit model);
+        Task<Habit> GetByIdAsync(int id);
+        Task<List<Habit>> GetListAsync();
+        Task<List<DayHabit>> GetListForDayAsync(int childId, DateOnly day);
+        Task<Habit> UpdateAsync(Habit model);
 
-        Task<HabbitHistory> SetStatusAsync(int habbitId, int childId, DateOnly day, HabbitHistoryStatus status);
-        Task<WeekHabbitStatistic> GetStatisticsAsync(int childId, DateOnly startDay, DateOnly endDay);
+        Task<HabitHistory> SetStatusAsync(int habitId, int childId, DateOnly day, HabitHistoryStatus status);
+        Task<WeekHabitStatistic> GetStatisticsAsync(int childId, DateOnly startDay, DateOnly endDay);
     }
 }

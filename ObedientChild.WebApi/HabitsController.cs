@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ObedientChild.App;
-using ObedientChild.App.Habbits;
+using ObedientChild.App.Habits;
 using ObedientChild.Domain;
-using ObedientChild.Domain.Habbits;
+using ObedientChild.Domain.Habits;
 
 namespace ObedientChild.WebApi
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class HabbitsController : ControllerBase
+    public class HabitsController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IHabbitsService _service;
+        private readonly IHabitsService _service;
 
-        public HabbitsController(IMapper mapper, IHabbitsService service)
+        public HabitsController(IMapper mapper, IHabitsService service)
         {
             _mapper = mapper;
             _service = service;
@@ -25,7 +25,7 @@ namespace ObedientChild.WebApi
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<Habbit>>> GetList()
+        public async Task<ActionResult<IEnumerable<Habit>>> GetList()
         {
             var list = await _service.GetListAsync();
 
@@ -34,7 +34,7 @@ namespace ObedientChild.WebApi
 
         [HttpGet("day")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<DayHabbit>>> GetListForDay([FromQuery] int childId, [FromQuery] DateOnly day)
+        public async Task<ActionResult<IEnumerable<DayHabit>>> GetListForDay([FromQuery] int childId, [FromQuery] DateOnly day)
         {
             // получаем объединенный список привычек активных на текущий момент + выполненные или пропущенные
             var list = await _service.GetListForDayAsync(childId, day);
@@ -44,7 +44,7 @@ namespace ObedientChild.WebApi
 
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<Habbit>> GetById(int id)
+        public async Task<ActionResult<Habit>> GetById(int id)
         {
             var item = await _service.GetByIdAsync(id);
 
@@ -52,20 +52,20 @@ namespace ObedientChild.WebApi
         }
 
         [HttpPut]
-        public async Task Add(Habbit habbit)
+        public async Task Add(Habit habit)
         {
             if (ModelState.IsValid)
             {
-                await _service.AddAsync(habbit);
+                await _service.AddAsync(habit);
             }
         }
 
-        [HttpPost("{habbitId}/child/{childId}")]
-        public async Task SetForChild(int habbitId, int childId)
+        [HttpPost("{habitId}/child/{childId}")]
+        public async Task SetForChild(int habitId, int childId)
         {
             if (ModelState.IsValid)
             {
-                await _service.SetForChildAsync(childId, habbitId);
+                await _service.SetForChildAsync(childId, habitId);
             }
         }
 
@@ -73,30 +73,30 @@ namespace ObedientChild.WebApi
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            // set end date or remove if doesn't exist in habbit history
+            // set end date or remove if doesn't exist in habit history
              await _service.DeleteAsync(id);
         }
 
-        [HttpDelete("{habbitId}/child/{childId}")]
-        public async Task UnsetForChild(int habbitId, int childId)
+        [HttpDelete("{habitId}/child/{childId}")]
+        public async Task UnsetForChild(int habitId, int childId, [FromQuery] DateOnly day)
         {
-            await _service.UnsetForChildAsync(habbitId, childId);
+            await _service.UnsetForChildAsync(habitId, childId, day);
         }
 
         [HttpPost("{id}")]
-        public async Task<ActionResult<Habbit>> Update(int id, [FromBody] Habbit model)
+        public async Task<ActionResult<Habit>> Update(int id, [FromBody] Habit model)
         {
             return await _service.UpdateAsync(model);
         }
 
         [HttpPost("{id}/status")]
-        public async Task<ActionResult<HabbitHistory>> SetStatus(int id, [FromQuery] int childId, [FromQuery] DateOnly day, [FromQuery] HabbitHistoryStatus status)
+        public async Task<ActionResult<HabitHistory>> SetStatus(int id, [FromQuery] int childId, [FromQuery] DateOnly day, [FromQuery] HabitHistoryStatus status)
         {
             return await _service.SetStatusAsync(id, childId, day, status);
         }
 
         [HttpGet("statistics")]
-        public async Task<ActionResult<WeekHabbitStatistic>> GetStatistics([FromQuery] int childId, [FromQuery] DateOnly startDay, [FromQuery] DateOnly endDay)
+        public async Task<ActionResult<WeekHabitStatistic>> GetStatistics([FromQuery] int childId, [FromQuery] DateOnly startDay, [FromQuery] DateOnly endDay)
         {
             return await _service.GetStatisticsAsync(childId, startDay, endDay);
         }

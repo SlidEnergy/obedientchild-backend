@@ -1,26 +1,26 @@
 ﻿using System;
 
-namespace ObedientChild.Domain.Habbits
+namespace ObedientChild.Domain.Habits
 {
-    public class ChildHabbit
+    public class ChildHabit
     {
         public int ChildId { get; set; }
 
-        public int HabbitId { get; set; }
+        public int HabitId { get; set; }
 
         public DateOnly StartDate { get; set; }
 
         public DateOnly? EndDate { get; set; }
 
-        public ChildHabbit()
+        public ChildHabit()
         {
 
         }
 
-        public ChildHabbit(int childId, int habbitId)
+        public ChildHabit(int childId, int habitId)
         {
             ChildId = childId;
-            HabbitId = habbitId;
+            HabitId = habitId;
             StartDate = DateOnly.FromDateTime(DateTime.Today);
         }
     }

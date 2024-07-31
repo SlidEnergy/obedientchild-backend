@@ -1,5 +1,5 @@
 ﻿using ObedientChild.Domain;
-using ObedientChild.Domain.Habbits;
+using ObedientChild.Domain.Habits;
 using System;
 
 namespace ObedientChild.App;
@@ -11,7 +11,7 @@ public interface ICoinHistoryFactory
     CoinHistory CreateSpendManual(int childId, int count);
     CoinHistory CreateSpend(int childId, Reward reward);
 
-    CoinHistory CreateEarnHabbit(int childId, Habbit habbit);
+    CoinHistory CreateEarnHabit(int childId, Habit habit);
 
-    CoinHistory CreateSpendHabbit(int childId, Habbit habbit);
+    CoinHistory CreateSpendHabit(int childId, Habit habit);
 }

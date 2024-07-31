@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ObedientChild.App;
 using ObedientChild.Domain;
-using ObedientChild.Domain.Habbits;
+using ObedientChild.Domain.Habits;
 
 namespace ObedientChild.Infrastructure
 {
@@ -17,8 +17,8 @@ namespace ObedientChild.Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ChildHabbit>()
-                .HasKey(key => new { key.HabbitId, key.ChildId });
+            modelBuilder.Entity<ChildHabit>()
+                .HasKey(key => new { key.HabitId, key.ChildId });
         }
 
         public DbSet<AuthToken> AuthTokens { get; set; }
@@ -29,11 +29,11 @@ namespace ObedientChild.Infrastructure
 
         public DbSet<Reward> Rewards { get; set; }
         public DbSet<GoodDeed> GoodDeeds { get; set; }
-        public DbSet<Habbit> Habbits { get; set; }
+        public DbSet<Habit> Habits { get; set; }
         public DbSet<BadDeed> BadDeeds { get; set; }
 
         public DbSet<CoinHistory> CoinHistory { get; set; }
-        public DbSet<HabbitHistory> HabbitHistory { get; set; }
-        public DbSet<ChildHabbit> ChildHabbits { get; set; }
+        public DbSet<HabitHistory> HabitHistory { get; set; }
+        public DbSet<ChildHabit> ChildHabits { get; set; }
     }
 }

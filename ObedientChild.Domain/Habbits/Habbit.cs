@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ObedientChild.Domain.Habbits
+namespace ObedientChild.Domain.Habits
 {
-    public class Habbit
+    public class Habit
     {
         public int Id { get; set; }
 

@@ -7,43 +7,43 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ObedientChild.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddHabbits : Migration
+    public partial class AddHabit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ChildHabbits",
+                name: "ChildHabits",
                 columns: table => new
                 {
                     ChildId = table.Column<int>(type: "integer", nullable: false),
-                    HabbitId = table.Column<int>(type: "integer", nullable: false),
+                    HabitId = table.Column<int>(type: "integer", nullable: false),
                     StartDate = table.Column<DateOnly>(type: "date", nullable: false),
                     EndDate = table.Column<DateOnly>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChildHabbits", x => new { x.HabbitId, x.ChildId });
+                    table.PrimaryKey("PK_ChildHabits", x => new { x.HabitId, x.ChildId });
                 });
 
             migrationBuilder.CreateTable(
-                name: "HabbitHistory",
+                name: "HabitHistory",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ChildId = table.Column<int>(type: "integer", nullable: false),
-                    HabbitId = table.Column<int>(type: "integer", nullable: false),
+                    HabitId = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     Day = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HabbitHistory", x => x.Id);
+                    table.PrimaryKey("PK_HabitHistory", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Habbits",
+                name: "Habits",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -54,7 +54,7 @@ namespace ObedientChild.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Habbits", x => x.Id);
+                    table.PrimaryKey("PK_Habits", x => x.Id);
                 });
         }
 
@@ -62,13 +62,13 @@ namespace ObedientChild.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ChildHabbits");
+                name: "ChildHabits");
 
             migrationBuilder.DropTable(
-                name: "HabbitHistory");
+                name: "HabitHistory");
 
             migrationBuilder.DropTable(
-                name: "Habbits");
+                name: "Habits");
         }
     }
 }

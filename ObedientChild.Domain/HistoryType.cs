@@ -5,6 +5,6 @@
         Manual,
         GoodDeed,
         BadDeed,
-        Habbit
+        Habit
     }
 }

@@ -11,5 +11,6 @@ namespace ObedientChild.Domain
         None = 0,
         Done = 1,
         Skipped = 2,
+        Failed = 3
     }
 }

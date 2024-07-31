@@ -175,6 +175,7 @@ namespace ObedientChild.App.Habits
             int totalHabits = 0;
             int totalSkipped = 0;
             int totalDone = 0;
+            int totalFailed = 0;
 
             DateOnly day = startDay;
             while (day <= endDay)
@@ -193,6 +194,7 @@ namespace ObedientChild.App.Habits
                     HabitsCount = habitsCount,
                     DoneHabitsCount = history.Count(x => x.Status == HabitHistoryStatus.Done),
                     SkippedHabitsCount = history.Count(x => x.Status == HabitHistoryStatus.Skipped),
+                    FailedHabitsCount = history.Count(x => x.Status == HabitHistoryStatus.Failed),
                 };
 
                 result.DayStatistics.Add(dayStatistic);
@@ -200,6 +202,7 @@ namespace ObedientChild.App.Habits
                 totalHabits += habitsCount;
                 totalDone += dayStatistic.DoneHabitsCount;
                 totalSkipped += dayStatistic.SkippedHabitsCount;
+                totalFailed += dayStatistic.FailedHabitsCount;
 
                 day = day.AddDays(1);
             }
@@ -207,6 +210,7 @@ namespace ObedientChild.App.Habits
             result.HabitsCount = totalHabits; 
             result.DoneHabitsCount = totalDone; 
             result.SkippedHabitsCount = totalSkipped; 
+            result.FailedHabitsCount = totalFailed; 
 
             return result;
         }

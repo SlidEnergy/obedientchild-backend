@@ -12,6 +12,8 @@ namespace ObedientChild.App.Habits
 
         public int SkippedHabitsCount { get; set; }
 
+        public int FailedHabitsCount { get; set; }
+
         public float DayPercent => HabitsCount == 0 ? 0 : (float)(DoneHabitsCount + SkippedHabitsCount) / (float)HabitsCount;
     }
 }

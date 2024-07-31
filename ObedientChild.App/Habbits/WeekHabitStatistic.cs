@@ -10,6 +10,8 @@ namespace ObedientChild.App.Habits
 
         public int SkippedHabitsCount { get; set; }
 
+        public int FailedHabitsCount { get; set; }
+
         public float WeekPercent => HabitsCount == 0 ? 0 : (float)(DoneHabitsCount + SkippedHabitsCount) / (float)HabitsCount;
 
         public List<DayStatistic> DayStatistics { get; set; } = new List<DayStatistic>();

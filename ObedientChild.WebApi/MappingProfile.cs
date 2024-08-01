@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using ObedientChild.App;
 using ObedientChild.Domain;
 using ObedientChild.Infrastructure;
 
@@ -17,7 +18,7 @@ namespace ObedientChild.WebApi
             CreateMap<Dto.User, ApplicationUser>()
                 .ForAllMembers(opt => opt.Ignore());
 
-            CreateMap<Child, Dto.Child>()
+            CreateMap<ChildView, Dto.Child>()
                 .ForMember(dest => dest.Avatar,
                     opt => opt.MapFrom(src => "data:image/png;base64," + Convert.ToBase64String(src.Avatar)));
         }

@@ -35,5 +35,7 @@ namespace ObedientChild.Infrastructure
         public DbSet<CoinHistory> CoinHistory { get; set; }
         public DbSet<HabitHistory> HabitHistory { get; set; }
         public DbSet<ChildHabit> ChildHabits { get; set; }
+
+        public DbSet<ChildStatus> ChildStatuses { get; set; }
     }
 }

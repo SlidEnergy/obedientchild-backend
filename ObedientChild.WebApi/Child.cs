@@ -1,4 +1,7 @@
-﻿namespace ObedientChild.WebApi.Dto
+﻿using ObedientChild.Domain;
+using System.Collections.Generic;
+
+namespace ObedientChild.WebApi.Dto
 {
     public class Child
     {
@@ -17,5 +20,7 @@
         public int DreamId { get; set; }
 
         public int DreamBalance { get; set; }
+
+        public List<ChildStatus> Statuses { get; set; }
     }
 }

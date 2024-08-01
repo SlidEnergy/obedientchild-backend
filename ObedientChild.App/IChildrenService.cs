@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ObedientChild.Domain;
 
 namespace ObedientChild.App
@@ -8,7 +9,7 @@ namespace ObedientChild.App
     {
         Task<List<Child>> GetListAsync();
 
-        Task<Child> GetByIdAsync(int childId);
+        Task<ChildView> GetByIdAsync(int childId);
         
         Task SaveAvatarAsync(int childId, byte[] image);
 
@@ -23,5 +24,8 @@ namespace ObedientChild.App
         Task SetGoalAsync(int id, int rewardId);
 
         Task SetDreamAsync(int id, int rewardId);
+
+        Task AddStatusAsync(int id, ChildStatus childStatus);
+        Task DeleteStatusAsync(int id, int childStatusId);
     }
 }

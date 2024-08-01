@@ -40,7 +40,7 @@ namespace ObedientChild.WebApi
         {
             var item = await _childrenService.GetByIdAsync(id);
 
-            return _mapper.Map<Dto.Child>(item); ;
+            return _mapper.Map<Dto.Child>(item);
         }
 
         [HttpPost("{id}/avatar")]
@@ -130,6 +130,18 @@ namespace ObedientChild.WebApi
         public async Task SetDream(int id, [FromBody] int rewardId)
         {
             await _childrenService.SetDreamAsync(id, rewardId);
+        }
+
+        [HttpPut("{id}/status")]
+        public async Task AddStatus(int id, [FromBody] ChildStatus childStatus)
+        {
+            await _childrenService.AddStatusAsync(id, childStatus);
+        }
+
+        [HttpDelete("{id}/status/{childStatusId}")]
+        public async Task DeleteStatus(int id, int childStatusId)
+        {
+            await _childrenService.DeleteStatusAsync(id, childStatusId);
         }
     }
 }

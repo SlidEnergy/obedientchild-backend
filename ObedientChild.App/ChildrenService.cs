@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ObedientChild.App
 {
@@ -27,9 +28,12 @@ namespace ObedientChild.App
 			return await _context.Children.ToListAsync();
 		}
 
-		public async Task<Child> GetByIdAsync(int childId)
+		public async Task<ChildView> GetByIdAsync(int childId)
 		{
-			return await _context.Children.FindAsync(childId);
+			var child = await _context.Children.FindAsync(childId);
+			var statuses = await _context.ChildStatuses.Where(x => x.ChildId == childId).ToListAsync();
+
+            return new ChildView(child) { Statuses = statuses};
 		}
 
         public async Task SaveAvatarAsync(int childId, byte[] data)
@@ -145,6 +149,32 @@ namespace ObedientChild.App
             if (child != null && reward != null)
             {
                 child.SetDream(rewardId);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddStatusAsync(int id, ChildStatus childStatus)
+        {
+            var child = await _context.Children.FindAsync(id);
+
+            if (child != null)
+            {
+                childStatus.ChildId = id;
+                _context.ChildStatuses.Add(childStatus);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteStatusAsync(int id, int childStatusId)
+        {
+            var child = await _context.Children.FindAsync(id);
+            var model = await _context.ChildStatuses.FindAsync(childStatusId);
+
+            if (child != null && model != null)
+            {
+                _context.ChildStatuses.Remove(model);
 
                 await _context.SaveChangesAsync();
             }

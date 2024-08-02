@@ -101,6 +101,8 @@ namespace ObedientChild.App.Habits
 
         public async Task<HabitHistory> SetStatusAsync(int habitId, int childId, DateOnly day, HabitHistoryStatus status)
         {
+            var child = await _context.Children.FindAsync(childId);
+
             var habit = await _context.Habits.FirstOrDefaultAsync(x => x.Id == habitId);
 
             if (habit == null)
@@ -111,29 +113,36 @@ namespace ObedientChild.App.Habits
             // update or remove entry
             if (habitHistory != null)
             {
-                if (status == HabitHistoryStatus.None)
+                if (habitHistory.Status == status)
+                    return null;
+
+                if(habitHistory.Status == HabitHistoryStatus.None)
+                    throw new InvalidOperationException("Doesn't support operations habbit history with status None");
+
+                if (status != HabitHistoryStatus.None)
+                    throw new InvalidOperationException("If habit history exists support only transit status to None");
+
+                // Rollback coin history and spend/earn
+                if (habitHistory.Status == HabitHistoryStatus.Done)
                 {
                     var coinHistory = _historyFactory.CreateSpendHabit(childId, habit);
                     _context.CoinHistory.Add(coinHistory);
 
-                    _context.HabitHistory.Remove(habitHistory);
-                    await _context.SaveChangesAsync();
-
-                    return null;
+                    child.SpendCoin(habit.Price);
                 }
-                else if (habitHistory.Status != status)
+
+                if (habitHistory.Status == HabitHistoryStatus.Failed)
                 {
-                    if (status == HabitHistoryStatus.Done)
-                    {
-                        var coinHistory = _historyFactory.CreateEarnHabit(childId, habit);
-                        _context.CoinHistory.Add(coinHistory);
-                    }
+                    var coinHistory = _historyFactory.CreateEarnHabit(childId, habit);
+                    _context.CoinHistory.Add(coinHistory);
 
-                    habitHistory.Status = status;
-                    await _context.SaveChangesAsync();
-
-                    return habitHistory;
+                    child.EarnCoin(habit.Price);
                 }
+
+                _context.HabitHistory.Remove(habitHistory);
+                await _context.SaveChangesAsync();
+
+                return null;
             }
             // create entry
             else
@@ -142,16 +151,26 @@ namespace ObedientChild.App.Habits
 
                 if (model != null)
                 {
-                    if (status == HabitHistoryStatus.None)
-                        return null;
+                    if (status == HabitHistoryStatus.Done)
+                    {
+                        var coinHistory = _historyFactory.CreateEarnHabit(childId, habit);
+                        _context.CoinHistory.Add(coinHistory);
 
-                    var coinHistory = _historyFactory.CreateEarnHabit(childId, habit);
-                    _context.CoinHistory.Add(coinHistory);
+                        child.EarnCoin(habit.Price);
+                    }
+
+                    if (status == HabitHistoryStatus.Failed)
+                    {
+                        var coinHistory = _historyFactory.CreateSpendHabit(childId, habit);
+                        _context.CoinHistory.Add(coinHistory);
+
+                        child.SpendCoin(habit.Price);
+                    }
 
                     var newHabitHistory = new HabitHistory(day, childId, habitId, status);
                     _context.HabitHistory.Add(newHabitHistory);
                     await _context.SaveChangesAsync();
-                    
+
                     return newHabitHistory;
                 }
             }
@@ -207,10 +226,10 @@ namespace ObedientChild.App.Habits
                 day = day.AddDays(1);
             }
 
-            result.HabitsCount = totalHabits; 
-            result.DoneHabitsCount = totalDone; 
-            result.SkippedHabitsCount = totalSkipped; 
-            result.FailedHabitsCount = totalFailed; 
+            result.HabitsCount = totalHabits;
+            result.DoneHabitsCount = totalDone;
+            result.SkippedHabitsCount = totalSkipped;
+            result.FailedHabitsCount = totalFailed;
 
             return result;
         }

@@ -28,7 +28,7 @@ namespace ObedientChild.Infrastucture
 			_logger = _services.GetRequiredService<ILogger<DbInitializer>>();
 		}
 
-		public async Task Initialize()
+		public async System.Threading.Tasks.Task Initialize()
 		{
 			_context.Database.EnsureCreated();
 
@@ -37,7 +37,7 @@ namespace ObedientChild.Infrastucture
             await CreateChildrenAsync();
         }
 
-		private async Task CreateDefaultUserAndRoleAsync()
+		private async System.Threading.Tasks.Task CreateDefaultUserAndRoleAsync()
 		{
 			const string email = "admin@mail.ru";
 			const string password = "admin";
@@ -73,7 +73,7 @@ namespace ObedientChild.Infrastucture
 			}
 		}
 
-		private async Task CreateDefaultAdministratorRole(string administratorRole)
+		private async System.Threading.Tasks.Task CreateDefaultAdministratorRole(string administratorRole)
 		{
 			_logger.LogInformation($"Create the role `{administratorRole}` for application");
 			var result = await _roleManager.CreateAsync(new IdentityRole(administratorRole));
@@ -110,7 +110,7 @@ namespace ObedientChild.Infrastucture
 			return createdUser;
 		}
 
-		private async Task SetPasswordForUser(string email, ApplicationUser user, string password)
+		private async System.Threading.Tasks.Task SetPasswordForUser(string email, ApplicationUser user, string password)
 		{
 			_logger.LogInformation($"Set password for default user `{email}`");
 			var result = await _userManager.AddPasswordAsync(user, password);
@@ -126,7 +126,7 @@ namespace ObedientChild.Infrastucture
 			}
 		}
 
-		private async Task AddRoleToUser(string email, string administratorRole, ApplicationUser user)
+		private async System.Threading.Tasks.Task AddRoleToUser(string email, string administratorRole, ApplicationUser user)
 		{
 			_logger.LogInformation($"Add default user `{email}` to role '{administratorRole}'");
 			var result = await _userManager.AddToRoleAsync(user, administratorRole);
@@ -145,7 +145,7 @@ namespace ObedientChild.Infrastucture
 		private static string GetIdentiryErrorsInCommaSeperatedList(IdentityResult result) =>
 			Lers.Utils.ArrayUtils.JoinToString(result.Errors.Select(x => x.Description), ", ");
 
-        private async Task CreateChildrenAsync()
+        private async System.Threading.Tasks.Task CreateChildrenAsync()
         {
             var count = await _context.Children.CountAsync();
 

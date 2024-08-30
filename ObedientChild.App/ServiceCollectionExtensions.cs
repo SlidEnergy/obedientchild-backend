@@ -16,6 +16,7 @@ namespace ObedientChild.App
 			services.AddScoped<ICoinHistoryService, CoinHistoryService>();
 			services.AddScoped<ICoinHistoryFactory, CoinHistoryFactory>();
 			services.AddScoped<IHabitsService, HabitsService>();
+			services.AddScoped<IChildTasksService, ChildTasksService>();
 
 			return services;
 		}

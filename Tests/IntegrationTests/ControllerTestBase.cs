@@ -26,7 +26,7 @@ namespace ObedientChild.WebApi.IntegrationTests
 		protected DataAccessLayer _dal;
 
 		[OneTimeSetUp]
-		public async Task HttpClientSetup()
+		public async System.Threading.Tasks.Task HttpClientSetup()
 		{
 			_factory = new WebApiApplicationFactory<Startup>();
 			_client = _factory.CreateClient();
@@ -73,7 +73,7 @@ namespace ObedientChild.WebApi.IntegrationTests
 			return user;
 		}
 
-		protected virtual async Task CreateRole()
+		protected virtual async System.Threading.Tasks.Task CreateRole()
 		{
 			var result = await _roleManager.CreateAsync(new IdentityRole(Role.Admin));
 
@@ -81,7 +81,7 @@ namespace ObedientChild.WebApi.IntegrationTests
 				throw new Exception("Новая группа не создана");
 		}
 
-		protected virtual async Task Login(string email, string password)
+		protected virtual async System.Threading.Tasks.Task Login(string email, string password)
 		{
 			var request = HttpRequestBuilder.CreateJsonRequest("POST", "/api/v1/users/token", null,
 				new { Email = email, Password = password, ConfirmPassword = password });

@@ -21,7 +21,7 @@ namespace ObedientChild.UnitTests
 		protected Mock<IAuthTokensRepository> _authTokens;
 
 		[SetUp]
-		public async Task SetupBase()
+		public async System.Threading.Tasks.Task SetupBase()
 		{
 			var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 			optionsBuilder.UseInMemoryDatabase(TestContext.CurrentContext.Test.Name);

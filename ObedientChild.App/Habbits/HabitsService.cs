@@ -46,14 +46,14 @@ namespace ObedientChild.App.Habits
             return await _context.Habits.FindAsync(id);
         }
 
-        public async Task AddAsync(Habit model)
+        public async System.Threading.Tasks.Task AddAsync(Habit model)
         {
             _context.Habits.Add(model);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task SetForChildAsync(int childId, int habitId)
+        public async System.Threading.Tasks.Task SetForChildAsync(int childId, int habitId)
         {
             var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.HabitId == habitId && x.ChildId == childId);
 
@@ -69,7 +69,7 @@ namespace ObedientChild.App.Habits
             await _context.SaveChangesAsync();
         }
 
-        public async Task UnsetForChildAsync(int id, int childId, DateOnly day)
+        public async System.Threading.Tasks.Task UnsetForChildAsync(int id, int childId, DateOnly day)
         {
             var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.HabitId == id && x.ChildId == childId);
 
@@ -88,7 +88,7 @@ namespace ObedientChild.App.Habits
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async System.Threading.Tasks.Task DeleteAsync(int id)
         {
             var model = await _context.Habits.FindAsync(id);
 

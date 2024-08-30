@@ -36,7 +36,7 @@ namespace ObedientChild.App
             return new ChildView(child) { Statuses = statuses};
 		}
 
-        public async Task SaveAvatarAsync(int childId, byte[] data)
+        public async System.Threading.Tasks.Task SaveAvatarAsync(int childId, byte[] data)
         {
             var child = await _context.Children.FindAsync(childId);
 
@@ -128,7 +128,7 @@ namespace ObedientChild.App
             return 0;
         }
 
-        public async Task SetGoalAsync(int id, int rewardId)
+        public async System.Threading.Tasks.Task SetGoalAsync(int id, int rewardId)
         {
             var child = await _context.Children.FindAsync(id);
             var reward = await _context.Rewards.FindAsync(rewardId);
@@ -141,7 +141,7 @@ namespace ObedientChild.App
             }
         }
 
-        public async Task SetDreamAsync(int id, int rewardId)
+        public async System.Threading.Tasks.Task SetDreamAsync(int id, int rewardId)
         {
             var child = await _context.Children.FindAsync(id);
             var reward = await _context.Rewards.FindAsync(rewardId);
@@ -154,7 +154,7 @@ namespace ObedientChild.App
             }
         }
 
-        public async Task AddStatusAsync(int id, ChildStatus childStatus)
+        public async System.Threading.Tasks.Task AddStatusAsync(int id, ChildStatus childStatus)
         {
             var child = await _context.Children.FindAsync(id);
 
@@ -167,7 +167,7 @@ namespace ObedientChild.App
             }
         }
 
-        public async Task DeleteStatusAsync(int id, int childStatusId)
+        public async System.Threading.Tasks.Task DeleteStatusAsync(int id, int childStatusId)
         {
             var child = await _context.Children.FindAsync(id);
             var model = await _context.ChildStatuses.FindAsync(childStatusId);

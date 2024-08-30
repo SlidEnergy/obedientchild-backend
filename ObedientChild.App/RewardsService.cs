@@ -24,14 +24,14 @@ namespace ObedientChild.App
 			return await _context.Rewards.FindAsync(id);
 		}
 
-        public async Task AddRewardAsync(Reward reward)
+        public async System.Threading.Tasks.Task AddRewardAsync(Reward reward)
         {
             _context.Rewards.Add(reward);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteRewardAsync(int id)
+        public async System.Threading.Tasks.Task DeleteRewardAsync(int id)
         {
             var reward = await _context.Rewards.FindAsync(id);
 

@@ -35,15 +35,15 @@ namespace ObedientChild.UnitTests
 		[Test]
 		[TestCase(AccessMode.All)]
 		[TestCase(AccessMode.Import)]
-		public async Task GenerateAccessAndRefreshTokens_ShouldBeCalledMethods(AccessMode accessMode)
+		public async System.Threading.Tasks.Task GenerateAccessAndRefreshTokens_ShouldBeCalledMethods(AccessMode accessMode)
 		{
 			var accessToken = Guid.NewGuid().ToString();
 			var refreshToken = Guid.NewGuid().ToString();
 
 			_tokenGenerator.Setup(x => x.GenerateAccessToken(It.IsAny<ApplicationUser>(), It.IsAny<IEnumerable<string>>(), It.IsAny<AccessMode>())).Returns(accessToken);
 			_tokenGenerator.Setup(x => x.GenerateRefreshToken()).Returns(refreshToken);
-			_authTokenService.Setup(x => x.AddToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<AuthTokenType>())).Returns(Task.CompletedTask);
-			_manager.Setup(x => x.GetRolesAsync(It.IsAny<ApplicationUser>())).Returns(Task.FromResult<IList<string>>(new List<string> { Role.Admin }));
+            _authTokenService.Setup(x => x.AddToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<AuthTokenType>())).Returns(System.Threading.Tasks.Task.CompletedTask);
+            _manager.Setup(x => x.GetRolesAsync(It.IsAny<ApplicationUser>())).Returns(System.Threading.Tasks.Task.FromResult<IList<string>>(new List<string> { Role.Admin }));
 
 			await _service.GenerateAccessAndRefreshTokens(_user, accessMode);
 
@@ -55,7 +55,7 @@ namespace ObedientChild.UnitTests
 
 
 		[Test]
-		public async Task RefreshToken_ShouldCalledMethods()
+		public async System.Threading.Tasks.Task RefreshToken_ShouldCalledMethods()
 		{
 			var authSettings = SettingsFactory.CreateAuth();
 			var claimsGenerator = new ClaimsGenerator(Options.Create(new IdentityOptions()));
@@ -105,12 +105,12 @@ namespace ObedientChild.UnitTests
 		//}
 
 		[Test]
-		public async Task Login_ShouldBeCallAddMethodWithRightArguments()
+		public async System.Threading.Tasks.Task Login_ShouldBeCallAddMethodWithRightArguments()
 		{
 			var password = "Password1#";
 
-			_manager.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).Returns(Task.FromResult(true));
-			_manager.Setup(x => x.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(_user));
+            _manager.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).Returns(System.Threading.Tasks.Task.FromResult(true));
+            _manager.Setup(x => x.FindByNameAsync(It.IsAny<string>())).Returns(System.Threading.Tasks.Task.FromResult(_user));
 
 			var result = await _service.CheckCredentialsAndGetToken(_user.Email, password);
 

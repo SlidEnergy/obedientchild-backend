@@ -81,5 +81,31 @@ namespace ObedientChild.App
                 ImageUrl = habit.ImageUrl
             };
         }
+
+        public CoinHistory CreateEarnGoodDeed(int childId, GoodDeed goodDeed)
+        {
+            return new CoinHistory()
+            {
+                Amount = goodDeed.Price,
+                ChildId = childId,
+                DateTime = DateTime.UtcNow,
+                Title = goodDeed.Title,
+                Type = HistoryType.Habit,
+                ImageUrl = goodDeed.ImageUrl
+            };
+        }
+
+        public CoinHistory CreateSpendGoodDeed(int childId, GoodDeed goodDeed)
+        {
+            return new CoinHistory()
+            {
+                Amount = -goodDeed.Price,
+                ChildId = childId,
+                DateTime = DateTime.UtcNow,
+                Title = goodDeed.Title,
+                Type = HistoryType.Habit,
+                ImageUrl = goodDeed.ImageUrl
+            };
+        }
     }
 }

@@ -8,10 +8,10 @@ namespace ObedientChild.App.Habits
 {
     public interface IHabitsService
     {
-        Task AddAsync(Habit model);
-        Task SetForChildAsync(int childId, int habitId);
-        Task UnsetForChildAsync(int id, int childId, DateOnly day);
-        Task DeleteAsync(int id);
+        System.Threading.Tasks.Task AddAsync(Habit model);
+        System.Threading.Tasks.Task SetForChildAsync(int childId, int habitId);
+        System.Threading.Tasks.Task UnsetForChildAsync(int id, int childId, DateOnly day);
+        System.Threading.Tasks.Task DeleteAsync(int id);
         Task<Habit> GetByIdAsync(int id);
         Task<List<Habit>> GetListAsync();
         Task<List<DayHabit>> GetListForDayAsync(int childId, DateOnly day);

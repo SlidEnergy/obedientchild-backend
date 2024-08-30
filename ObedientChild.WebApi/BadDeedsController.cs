@@ -39,7 +39,7 @@ namespace ObedientChild.WebApi
         }
 
         [HttpPut]
-        public async Task Add(BadDeed badDeed)
+        public async System.Threading.Tasks.Task Add(BadDeed badDeed)
         {
             if (ModelState.IsValid)
             {
@@ -48,7 +48,7 @@ namespace ObedientChild.WebApi
         }
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async System.Threading.Tasks.Task Delete(int id)
         {
              await _service.DeleteAsync(id);
         }

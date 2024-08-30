@@ -30,7 +30,7 @@ namespace ObedientChild.UnitTests
 		}
 
 		[Test]
-		public async Task Register_ShouldBeCallAddMethodWithRightArguments()
+		public async System.Threading.Tasks.Task Register_ShouldBeCallAddMethodWithRightArguments()
 		{
 			_manager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
@@ -44,10 +44,10 @@ namespace ObedientChild.UnitTests
 		}
 
 		[Test]
-		public async Task RegisterByToken_ShouldBeCallAddMethodWithRightArguments()
+		public async System.Threading.Tasks.Task RegisterByToken_ShouldBeCallAddMethodWithRightArguments()
 		{
 			_manager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(IdentityResult.Success);
-			_authTokenService.Setup(x => x.AddToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<AuthTokenType>())).Returns(Task.CompletedTask);
+            _authTokenService.Setup(x => x.AddToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<AuthTokenType>())).Returns(System.Threading.Tasks.Task.CompletedTask);
 
 			var token = "23423423";
 			var tokenType = AuthTokenType.TelegramUserId;

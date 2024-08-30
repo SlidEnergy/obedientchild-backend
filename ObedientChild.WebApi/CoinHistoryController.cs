@@ -39,7 +39,7 @@ namespace ObedientChild.WebApi
         }
 
         [HttpDelete("{id}")]
-        public async Task Revert(int id)
+        public async System.Threading.Tasks.Task Revert(int id)
         {
             await _service.RevertAsync(id);
         }

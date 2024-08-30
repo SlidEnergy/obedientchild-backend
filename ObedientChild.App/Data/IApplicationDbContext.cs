@@ -34,6 +34,8 @@ namespace ObedientChild.App
 
         DbSet<ChildStatus> ChildStatuses { get; set; }
 
+        DbSet<ChildTask> ChildTasks { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 
 		EntityEntry Entry(object entity);

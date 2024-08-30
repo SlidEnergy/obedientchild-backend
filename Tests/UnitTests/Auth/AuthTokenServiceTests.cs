@@ -30,7 +30,7 @@ namespace ObedientChild.UnitTests
 		[Test]
 		[TestCase(AuthTokenType.RefreshToken)]
 		[TestCase(AuthTokenType.TelegramUserId)]
-		public async Task AddToken_ShouldNotBeException(AuthTokenType type)
+		public async System.Threading.Tasks.Task AddToken_ShouldNotBeException(AuthTokenType type)
 		{
 			_manager.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
 			_authTokens.Setup(x => x.FindAnyToken(It.IsAny<string>())).ReturnsAsync(new AuthToken());

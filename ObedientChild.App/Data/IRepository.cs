@@ -10,6 +10,6 @@ namespace ObedientChild.App
         Task<List<TEntity>> GetList();
         Task<TEntity> Add(TEntity entity);
         Task<TEntity> Update(TEntity entity);
-        Task Delete(TEntity entity);
+        System.Threading.Tasks.Task Delete(TEntity entity);
     }
 }

@@ -24,14 +24,14 @@ namespace ObedientChild.App
 			return await _context.GoodDeeds.FindAsync(id);
 		}
 
-        public async Task AddAsync(GoodDeed deed)
+        public async System.Threading.Tasks.Task AddAsync(GoodDeed deed)
         {
             _context.GoodDeeds.Add(deed);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async System.Threading.Tasks.Task DeleteAsync(int id)
         {
             var deed = await _context.GoodDeeds.FindAsync(id);
 

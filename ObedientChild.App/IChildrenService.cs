@@ -10,8 +10,8 @@ namespace ObedientChild.App
         Task<List<Child>> GetListAsync();
 
         Task<ChildView> GetByIdAsync(int childId);
-        
-        Task SaveAvatarAsync(int childId, byte[] image);
+
+        System.Threading.Tasks.Task SaveAvatarAsync(int childId, byte[] image);
 
         Task<int> EarnCountAsync(int childId, int count);
         
@@ -21,11 +21,11 @@ namespace ObedientChild.App
 
         Task<int> SpendAsync(int childId, Reward reward);
 
-        Task SetGoalAsync(int id, int rewardId);
+        System.Threading.Tasks.Task SetGoalAsync(int id, int rewardId);
 
-        Task SetDreamAsync(int id, int rewardId);
+        System.Threading.Tasks.Task SetDreamAsync(int id, int rewardId);
 
-        Task AddStatusAsync(int id, ChildStatus childStatus);
-        Task DeleteStatusAsync(int id, int childStatusId);
+        System.Threading.Tasks.Task AddStatusAsync(int id, ChildStatus childStatus);
+        System.Threading.Tasks.Task DeleteStatusAsync(int id, int childStatusId);
     }
 }

@@ -52,7 +52,7 @@ namespace ObedientChild.WebApi
         }
 
         [HttpPut]
-        public async Task Add(Habit habit)
+        public async System.Threading.Tasks.Task Add(Habit habit)
         {
             if (ModelState.IsValid)
             {
@@ -61,7 +61,7 @@ namespace ObedientChild.WebApi
         }
 
         [HttpPost("{habitId}/child/{childId}")]
-        public async Task SetForChild(int habitId, int childId)
+        public async System.Threading.Tasks.Task SetForChild(int habitId, int childId)
         {
             if (ModelState.IsValid)
             {
@@ -71,14 +71,14 @@ namespace ObedientChild.WebApi
 
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async System.Threading.Tasks.Task Delete(int id)
         {
             // set end date or remove if doesn't exist in habit history
              await _service.DeleteAsync(id);
         }
 
         [HttpDelete("{habitId}/child/{childId}")]
-        public async Task UnsetForChild(int habitId, int childId, [FromQuery] DateOnly day)
+        public async System.Threading.Tasks.Task UnsetForChild(int habitId, int childId, [FromQuery] DateOnly day)
         {
             await _service.UnsetForChildAsync(habitId, childId, day);
         }

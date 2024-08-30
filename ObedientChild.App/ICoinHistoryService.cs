@@ -9,7 +9,7 @@ namespace ObedientChild.App
         Task<List<CoinHistory>> GetListAsync(int childId);
 
         Task<CoinHistory> GetByIdAsync(int id);
-        Task RevertAsync(int id);
+        System.Threading.Tasks.Task RevertAsync(int id);
     }
 
 }

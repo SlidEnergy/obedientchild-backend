@@ -14,4 +14,7 @@ public interface ICoinHistoryFactory
     CoinHistory CreateEarnHabit(int childId, Habit habit);
 
     CoinHistory CreateSpendHabit(int childId, Habit habit);
+
+    CoinHistory CreateEarnGoodDeed(int childId, GoodDeed goodDeed);
+    CoinHistory CreateSpendGoodDeed(int childId, GoodDeed goodDeed);
 }

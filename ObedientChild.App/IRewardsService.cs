@@ -10,9 +10,9 @@ namespace ObedientChild.App
 
         Task<Reward> GetByIdAsync(int id);
 
-        Task AddRewardAsync(Reward reward);
+        System.Threading.Tasks.Task AddRewardAsync(Reward reward);
 
-        Task DeleteRewardAsync(int id);
+        System.Threading.Tasks.Task DeleteRewardAsync(int id);
         
         Task<Reward> UpdateAsync(Reward reward);
     }

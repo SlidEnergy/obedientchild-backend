@@ -10,9 +10,9 @@ namespace ObedientChild.App
 
         Task<BadDeed> GetByIdAsync(int id);
 
-        Task AddAsync(BadDeed deed);
+        System.Threading.Tasks.Task AddAsync(BadDeed deed);
 
-        Task DeleteAsync(int id);
+        System.Threading.Tasks.Task DeleteAsync(int id);
 
         Task<BadDeed> UpdateAsync(BadDeed deed);
     }

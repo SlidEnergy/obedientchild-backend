@@ -15,7 +15,7 @@ namespace ObedientChild.App
 			_userManager = userManager;	
 		}
 
-		public async Task AddToken(string userId, string token, AuthTokenType type)
+		public async System.Threading.Tasks.Task AddToken(string userId, string token, AuthTokenType type)
 		{
 			var user = await _userManager.FindByIdAsync(userId);
 

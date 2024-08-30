@@ -34,7 +34,7 @@ namespace ObedientChild.Infrastructure
             return entity;
         }
 
-        public async Task Delete(TEntity entity)
+        public async System.Threading.Tasks.Task Delete(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
             await _dbContext.SaveChangesAsync();

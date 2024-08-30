@@ -37,5 +37,7 @@ namespace ObedientChild.Infrastructure
         public DbSet<ChildHabit> ChildHabits { get; set; }
 
         public DbSet<ChildStatus> ChildStatuses { get; set; }
+
+        public DbSet<ChildTask> ChildTasks { get; set; }
     }
 }

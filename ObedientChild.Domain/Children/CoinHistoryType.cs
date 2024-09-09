@@ -1,6 +1,6 @@
 ﻿namespace ObedientChild.Domain
 {
-    public enum HistoryType
+    public enum CoinHistoryType
     {
         Manual,
         GoodDeed,

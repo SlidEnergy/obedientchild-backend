@@ -14,7 +14,7 @@ namespace ObedientChild.Domain
 
         public string ImageUrl { get; set; }
 
-        public HistoryType Type { get; set; }
+        public CoinHistoryType Type { get; set; }
 
         public DateTime DateTime { get; set; }
     }

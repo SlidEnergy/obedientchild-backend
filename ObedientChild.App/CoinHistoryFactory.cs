@@ -14,7 +14,7 @@ namespace ObedientChild.App
                 ChildId = childId,
                 DateTime = DateTime.UtcNow,
                 Title = "Manual",
-                Type = HistoryType.Manual
+                Type = CoinHistoryType.Manual
             };
         }
 
@@ -26,7 +26,7 @@ namespace ObedientChild.App
                 ChildId = childId,
                 DateTime = DateTime.UtcNow,
                 Title = reward.Title,
-                Type = HistoryType.GoodDeed,
+                Type = CoinHistoryType.GoodDeed,
                 ImageUrl = reward.ImageUrl
             };
         }
@@ -39,7 +39,7 @@ namespace ObedientChild.App
                 ChildId = childId,
                 DateTime = DateTime.UtcNow,
                 Title = "Manual",
-                Type = HistoryType.Manual
+                Type = CoinHistoryType.Manual
             };
         }
 
@@ -51,7 +51,7 @@ namespace ObedientChild.App
                 ChildId = childId,
                 DateTime = DateTime.UtcNow,
                 Title = reward.Title,
-                Type = HistoryType.BadDeed, 
+                Type = CoinHistoryType.BadDeed, 
                 ImageUrl = reward.ImageUrl
             };
         }
@@ -64,7 +64,7 @@ namespace ObedientChild.App
                 ChildId = childId,
                 DateTime = DateTime.UtcNow,
                 Title = habit.Title,
-                Type = HistoryType.Habit,
+                Type = CoinHistoryType.Habit,
                 ImageUrl = habit.ImageUrl
             };
         }
@@ -77,7 +77,7 @@ namespace ObedientChild.App
                 ChildId = childId,
                 DateTime = DateTime.UtcNow,
                 Title = habit.Title,
-                Type = HistoryType.Habit,
+                Type = CoinHistoryType.Habit,
                 ImageUrl = habit.ImageUrl
             };
         }
@@ -90,7 +90,7 @@ namespace ObedientChild.App
                 ChildId = childId,
                 DateTime = DateTime.UtcNow,
                 Title = goodDeed.Title,
-                Type = HistoryType.Habit,
+                Type = CoinHistoryType.Habit,
                 ImageUrl = goodDeed.ImageUrl
             };
         }
@@ -103,7 +103,7 @@ namespace ObedientChild.App
                 ChildId = childId,
                 DateTime = DateTime.UtcNow,
                 Title = goodDeed.Title,
-                Type = HistoryType.Habit,
+                Type = CoinHistoryType.Habit,
                 ImageUrl = goodDeed.ImageUrl
             };
         }

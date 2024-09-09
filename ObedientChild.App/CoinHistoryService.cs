@@ -30,7 +30,7 @@ namespace ObedientChild.App
             return await _context.CoinHistory.FindAsync(id);
         }
 
-        public async System.Threading.Tasks.Task RevertAsync(int id)
+        public async Task RevertAsync(int id)
         {
             var history = await _context.CoinHistory.FindAsync(id);
 

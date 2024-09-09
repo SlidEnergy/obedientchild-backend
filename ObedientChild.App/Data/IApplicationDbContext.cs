@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using ObedientChild.Domain.Habits;
+using ObedientChild.Domain.LifeEnergy;
 
 namespace ObedientChild.App
 {
@@ -35,6 +36,12 @@ namespace ObedientChild.App
         DbSet<ChildStatus> ChildStatuses { get; set; }
 
         DbSet<ChildTask> ChildTasks { get; set; }
+
+        DbSet<TrusteeLifeEnergyAccount> TrusteeLifeEnergyAccounts { get; set; }
+
+        DbSet<LifeEnergyHistory> LifeEnergyHistory { get; set; }
+
+        DbSet<LifeEnergyAccount> LifeEnergyAccounts { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 

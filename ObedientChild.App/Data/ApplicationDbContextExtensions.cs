@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ObedientChild.Domain.LifeEnergy;
 
 namespace ObedientChild.App
 {
@@ -20,5 +21,23 @@ namespace ObedientChild.App
 
 			return userRole == null ? false : true;
 		}
-	}
+
+		public static async Task<LifeEnergyAccount> GetLifeEnergyAccountWithAccessCheckAsync(this IApplicationDbContext context, string userId)
+		{
+            return await context.Users
+                .Where(x => x.Id == userId)
+                .Join(context.TrusteeLifeEnergyAccounts, u => u.TrusteeId, t => t.TrusteeId, (u, t) => t)
+                .Join(context.LifeEnergyAccounts, t => t.LifeEnergyAccountId, a => a.Id, (t, a) => a)
+                .SingleOrDefaultAsync();
+        }
+
+        public static async Task<LifeEnergyHistory> GetLifeEnergyHistoryWithAccessCheckAsync(this IApplicationDbContext context, string userId, int id)
+        {
+            return await context.Users
+                .Where(x => x.Id == userId)
+                .Join(context.TrusteeLifeEnergyAccounts, u => u.TrusteeId, t => t.TrusteeId, (u, t) => t)
+                .Join(context.LifeEnergyHistory, t => t.LifeEnergyAccountId, h => h.LifeEnergyAccountId, (t, h) => h)
+                .SingleOrDefaultAsync(x => x.Id == id);
+        }
+    }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ObedientChild.App;
 using ObedientChild.Domain;
 using ObedientChild.Domain.Habits;
+using ObedientChild.Domain.LifeEnergy;
 
 namespace ObedientChild.Infrastructure
 {
@@ -19,6 +20,9 @@ namespace ObedientChild.Infrastructure
 
             modelBuilder.Entity<ChildHabit>()
                 .HasKey(key => new { key.HabitId, key.ChildId });
+
+            modelBuilder.Entity<TrusteeLifeEnergyAccount>()
+                .HasKey(key => new { key.TrusteeId, key.LifeEnergyAccountId });
         }
 
         public DbSet<AuthToken> AuthTokens { get; set; }
@@ -39,5 +43,11 @@ namespace ObedientChild.Infrastructure
         public DbSet<ChildStatus> ChildStatuses { get; set; }
 
         public DbSet<ChildTask> ChildTasks { get; set; }
+
+        public DbSet<TrusteeLifeEnergyAccount> TrusteeLifeEnergyAccounts { get; set; }
+
+        public DbSet<LifeEnergyHistory> LifeEnergyHistory { get; set;}
+
+        public DbSet<LifeEnergyAccount> LifeEnergyAccounts { get; set;}
     }
 }

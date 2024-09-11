@@ -48,7 +48,7 @@ namespace ObedientChild.App
 
             account.Balance -= amount;
 
-            var history = new LifeEnergyHistory(amount, title, account.Id);
+            var history = new LifeEnergyHistory(-1 * amount, title, account.Id);
 
             _context.LifeEnergyHistory.Add(history);
 

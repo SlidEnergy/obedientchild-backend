@@ -62,7 +62,7 @@ namespace ObedientChild.App.Habits
             if (child == null)
                 return null;
 
-            var childTask = await _context.ChildTasks.SingleOrDefaultAsync(x => x.Id == id);
+            var childTask = await _context.ChildTasks.Include(x => x.GoodDeed).SingleOrDefaultAsync(x => x.Id == id);
 
             if (childTask == null)
                 return null;

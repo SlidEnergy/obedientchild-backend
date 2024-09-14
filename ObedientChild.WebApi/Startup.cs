@@ -278,6 +278,7 @@ namespace ObedientChild.WebApi
             services.AddScoped<IClaimsGenerator, ClaimsGenerator>();
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddHttpClient();
 
             services.AddObedientChildCore();
         }

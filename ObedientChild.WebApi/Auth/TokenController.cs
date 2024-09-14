@@ -4,6 +4,7 @@ using ObedientChild.App;
 using ObedientChild.WebApi.Dto;
 using System.Threading.Tasks;
 using System.Security.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ObedientChild.WebApi
 {
@@ -50,6 +51,14 @@ namespace ObedientChild.WebApi
             {
                 return BadRequest();
             }
+        }
+
+        [HttpGet("validate")]
+        [Authorize]
+        public IActionResult ValidateToken()
+        {
+            // Если токен валиден, метод выполнится
+            return Ok();
         }
     }
 }

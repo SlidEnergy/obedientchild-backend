@@ -8,10 +8,11 @@ namespace ObedientChild.WebApi
     [ApiController]
     public class TasksController : ControllerBase
     {
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient;
 
-        public TasksController()
+        public TasksController(HttpClient httpClient)
         {
+            _httpClient = httpClient;
         }
 
         [HttpGet]

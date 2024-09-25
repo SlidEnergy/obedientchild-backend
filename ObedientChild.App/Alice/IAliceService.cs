@@ -4,6 +4,6 @@ namespace ObedientChild.App.Alice
 {
     public interface IAliceService
     {
-        Task<bool> HandleAsync(string command, AliceNaturalLanguageUnderstanding nlu);
+        Task<string> HandleAsync(string command, AliceNaturalLanguageUnderstanding nlu);
     }
 }

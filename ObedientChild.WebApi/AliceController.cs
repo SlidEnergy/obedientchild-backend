@@ -21,14 +21,11 @@ namespace ObedientChild.WebApi
         public async Task<IActionResult> Post([FromBody] AliceRequest request)
         {
             if (string.IsNullOrEmpty(request.Request?.Command) || request.Session?.New == true)
-                return Ok(CreateResponse(request, "Привет! Это навык Послушный ребенок. Пример команды: Аня нарушила правило Не обманывать. Приступим?"));
+                return Ok(CreateResponse(request, "Привет! Это навык Послушный ребенок. У меня можно: нарушить правило, прибавить или отнять монетку, выполнить/провалить/пропустить/отменить привычку"));
 
             var result = await _aliceService.HandleAsync(request.Request.Command, request.Request.Nlu);
 
-            if(result)
-                return Ok(CreateResponse(request, "Сделала"));
-
-            return Ok(CreateResponse(request, "Я не смогла, попробуйте снова."));
+            return Ok(CreateResponse(request, result ?? "Я не смогла, попробуйте снова"));
         }
 
         private AliceResponse CreateResponse(AliceRequest request, string responseText)

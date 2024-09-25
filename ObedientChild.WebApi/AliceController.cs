@@ -20,7 +20,7 @@ namespace ObedientChild.WebApi
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AliceRequest request)
         {
-            if (string.IsNullOrEmpty(request.Request?.Command))
+            if (string.IsNullOrEmpty(request.Request?.Command) || request.Session?.New == true)
                 return Ok(CreateResponse(request, "Привет! Это навык Послушный ребенок. Пример команды: Аня нарушила правило Не обманывать. Приступим?"));
 
             var result = await _aliceService.HandleAsync(request.Request.Command, request.Request.Nlu);
@@ -96,6 +96,9 @@ namespace ObedientChild.WebApi
 
         [JsonProperty("user_id")]
         public string UserId { get; set; }
+
+        [JsonProperty("new")]
+        public bool New { get; set; }
     }
 
     // Модель ответа для Алисы

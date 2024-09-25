@@ -31,6 +31,19 @@ namespace ObedientChild.App
             };
         }
 
+        public CoinHistory CreateEarn(int childId, BadDeed badDeed)
+        {
+            return new CoinHistory()
+            {
+                Amount = badDeed.Price,
+                ChildId = childId,
+                DateTime = DateTime.UtcNow,
+                Title = badDeed.Title,
+                Type = CoinHistoryType.BadDeed,
+                ImageUrl = badDeed.ImageUrl
+            };
+        }
+
         public CoinHistory CreateSpendManual(int childId, int count)
         {
             return new CoinHistory()
@@ -53,6 +66,19 @@ namespace ObedientChild.App
                 Title = reward.Title,
                 Type = CoinHistoryType.BadDeed, 
                 ImageUrl = reward.ImageUrl
+            };
+        }
+
+        public CoinHistory CreateSpend(int childId, BadDeed badDeed)
+        {
+            return new CoinHistory()
+            {
+                Amount = -badDeed.Price,
+                ChildId = childId,
+                DateTime = DateTime.UtcNow,
+                Title = badDeed.Title,
+                Type = CoinHistoryType.BadDeed,
+                ImageUrl = badDeed.ImageUrl
             };
         }
 

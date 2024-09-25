@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using ObedientChild.App.Alice;
 using ObedientChild.App.Habits;
 
 namespace ObedientChild.App
@@ -18,6 +19,7 @@ namespace ObedientChild.App
 			services.AddScoped<IHabitsService, HabitsService>();
 			services.AddScoped<IChildTasksService, ChildTasksService>();
 			services.AddScoped<ILifeEnergyService, LifeEnergyService>();
+			services.AddScoped<IAliceService, AliceService>();
 
 			return services;
 		}

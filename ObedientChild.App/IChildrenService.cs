@@ -21,11 +21,11 @@ namespace ObedientChild.App
 
         Task<int> SpendAsync(int childId, Reward reward);
 
-        System.Threading.Tasks.Task SetGoalAsync(int id, int rewardId);
+        Task SetGoalAsync(int id, int rewardId);
 
-        System.Threading.Tasks.Task SetDreamAsync(int id, int rewardId);
+        Task SetDreamAsync(int id, int rewardId);
 
-        System.Threading.Tasks.Task AddStatusAsync(int id, ChildStatus childStatus);
-        System.Threading.Tasks.Task DeleteStatusAsync(int id, int childStatusId);
+        Task<ChildStatus> AddStatusAsync(int id, ChildStatus childStatus);
+        Task DeleteStatusAsync(int id, int childStatusId);
     }
 }

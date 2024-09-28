@@ -121,25 +121,25 @@ namespace ObedientChild.WebApi
         }
 
         [HttpPost("{id}/setgoal")]
-        public async System.Threading.Tasks.Task SetGoal(int id, [FromBody] int rewardId)
+        public async Task SetGoal(int id, [FromBody] int rewardId)
         {
             await _childrenService.SetGoalAsync(id, rewardId);
         }
 
         [HttpPost("{id}/setdream")]
-        public async System.Threading.Tasks.Task SetDream(int id, [FromBody] int rewardId)
+        public async Task SetDream(int id, [FromBody] int rewardId)
         {
             await _childrenService.SetDreamAsync(id, rewardId);
         }
 
         [HttpPut("{id}/status")]
-        public async System.Threading.Tasks.Task AddStatus(int id, [FromBody] ChildStatus childStatus)
+        public async Task<ChildStatus> AddStatus(int id, [FromBody] ChildStatus childStatus)
         {
-            await _childrenService.AddStatusAsync(id, childStatus);
+            return await _childrenService.AddStatusAsync(id, childStatus);
         }
 
         [HttpDelete("{id}/status/{childStatusId}")]
-        public async System.Threading.Tasks.Task DeleteStatus(int id, int childStatusId)
+        public async Task DeleteStatus(int id, int childStatusId)
         {
             await _childrenService.DeleteStatusAsync(id, childStatusId);
         }

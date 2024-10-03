@@ -37,51 +37,21 @@ namespace ObedientChild.WebApi
 
         [HttpPost("powerup")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<LifeEnergyHistory>> PowerUpAsync([FromBody] LifeEnergyHistoryBindingModel history)
+        public async Task PowerUpAsync([FromBody] LifeEnergyChangeBindingModel history)
         {
             var userId = User.GetUserId();
 
-            return await _service.PowerUpAsync(userId, history.Amount, history.Title);
+            await _service.PowerUpAsync(userId, history.Amount, history.Title);
         }
 
 
         [HttpPost("powerdown")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<LifeEnergyHistory>> PowerDownAsync([FromBody] LifeEnergyHistoryBindingModel history)
+        public async Task PowerDownAsync([FromBody] LifeEnergyChangeBindingModel history)
         {
             var userId = User.GetUserId();
 
-            return await _service.PowerDownAsync(userId, history.Amount, history.Title);
-        }
-
-        [HttpGet("history")]
-        [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<LifeEnergyHistory>>> GetHistoryList()
-        {
-            var userId = User.GetUserId();
-
-            var list = await _service.GetHistoryListWithAccessCheckAsync(userId);
-
-            return list;
-        }
-
-        [HttpGet("history/{id}")]
-        [ProducesResponseType(200)]
-        public async Task<ActionResult<LifeEnergyHistory>> GetHistoryById(int id)
-        {
-            var userId = User.GetUserId();
-
-            var item = await _service.GetHistoryByIdAsync(userId, id);
-
-            return item;
-        }
-
-        [HttpDelete("history/{id}")]
-        public async Task RevertHistory(int id)
-        {
-            var userId = User.GetUserId();
-
-            await _service.RevertHistoryAsync(userId, id);
+            await _service.PowerDownAsync(userId, history.Amount, history.Title);
         }
 
         [HttpPut]

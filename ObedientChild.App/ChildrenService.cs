@@ -1,26 +1,24 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using ObedientChild.App.Balance;
 using ObedientChild.Domain;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ObedientChild.App
 {
     public class ChildrenService : IChildrenService
 	{
-		private readonly UserManager<ApplicationUser> _userManager;
-		private readonly IAuthTokenService _authTokenService;
 		private readonly IApplicationDbContext _context;
-        private readonly ICoinHistoryFactory _historyFactory;
+        private readonly IBalanceHistoryFactory _balanceHistoryFactory;
+        private readonly IBalanceService _balanceService;
 
-        public ChildrenService(UserManager<ApplicationUser> userManager, IAuthTokenService authTokenService, IApplicationDbContext context, ICoinHistoryFactory historyFactory)
+        public ChildrenService(IApplicationDbContext context, 
+            IBalanceHistoryFactory historyFactory, IBalanceService balanceService)
         {
-            _userManager = userManager;
-            _authTokenService = authTokenService;
             _context = context;
-            _historyFactory = historyFactory;
+            _balanceHistoryFactory = historyFactory;
+            _balanceService = balanceService;
         }
 
         public async Task<List<Child>> GetListAsync()
@@ -36,7 +34,7 @@ namespace ObedientChild.App
             return new ChildView(child) { Statuses = statuses};
 		}
 
-        public async System.Threading.Tasks.Task SaveAvatarAsync(int childId, byte[] data)
+        public async Task SaveAvatarAsync(int childId, byte[] data)
         {
             var child = await _context.Children.FindAsync(childId);
 
@@ -54,13 +52,8 @@ namespace ObedientChild.App
 
             if (child != null)
             {
-                child.EarnCoin(count);
-
-                var history = _historyFactory.CreateEarnManual(childId, count);
-
-                _context.CoinHistory.Add(history);
-
-                await _context.SaveChangesAsync();
+                var history = _balanceHistoryFactory.Create(childId, count);
+                await _balanceService.EarnCoinAsync(child, count, history.CloneProps());
 
                 return child.Balance;
             }
@@ -74,53 +67,8 @@ namespace ObedientChild.App
 
             if (child != null)
             {
-                child.SpendCoin(count);
-
-                var history = _historyFactory.CreateSpendManual(childId, count);
-
-                _context.CoinHistory.Add(history);
-
-                await _context.SaveChangesAsync();
-
-                return child.Balance;
-            }
-
-            return 0;
-        }
-
-        public async Task<int> EarnAsync(int childId, Reward reward)
-        {
-            var child = await _context.Children.FindAsync(childId);
-
-            if (child != null)
-            {
-                child.EarnCoin(reward.Price);
-
-                var history = _historyFactory.CreateEarn(childId, reward);
-
-                _context.CoinHistory.Add(history);
-
-                await _context.SaveChangesAsync();
-
-                return child.Balance;
-            }
-
-            return 0;
-        }
-
-        public async Task<int> SpendAsync(int childId, Reward reward)
-        {
-            var child = await _context.Children.FindAsync(childId);
-
-            if (child != null)
-            {
-                child.SpendCoin(reward.Price);
-
-                var history = _historyFactory.CreateSpend(childId, reward);
-
-                _context.CoinHistory.Add(history);
-
-                await _context.SaveChangesAsync();
+                var history = _balanceHistoryFactory.Create(childId, count, true);
+                await _balanceService.SpendCoinAsync(child, count, history.CloneProps());
 
                 return child.Balance;
             }
@@ -131,7 +79,7 @@ namespace ObedientChild.App
         public async Task SetGoalAsync(int id, int rewardId)
         {
             var child = await _context.Children.FindAsync(id);
-            var reward = await _context.Rewards.FindAsync(rewardId);
+            var reward = await _context.Deeds.SingleOrDefaultAsync(x => x.Id == rewardId && x.Type == DeedType.Reward);
 
             if (child != null && reward != null)
             {
@@ -144,7 +92,7 @@ namespace ObedientChild.App
         public async Task SetDreamAsync(int id, int rewardId)
         {
             var child = await _context.Children.FindAsync(id);
-            var reward = await _context.Rewards.FindAsync(rewardId);
+            var reward = await _context.Deeds.SingleOrDefaultAsync(x => x.Id == rewardId && x.Type == DeedType.Reward);
 
             if (child != null && reward != null)
             {

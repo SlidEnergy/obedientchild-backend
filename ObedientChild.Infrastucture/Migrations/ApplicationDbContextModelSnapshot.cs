@@ -268,7 +268,7 @@ namespace ObedientChild.Infrastructure.Migrations
                     b.ToTable("AuthTokens");
                 });
 
-            modelBuilder.Entity("ObedientChild.Domain.BadDeed", b =>
+            modelBuilder.Entity("ObedientChild.Domain.BalanceHistory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -276,20 +276,33 @@ namespace ObedientChild.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Price")
+                    b.Property<int>("Amount")
                         .HasColumnType("integer");
 
+                    b.Property<int>("BalanceType")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("EntityId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("Title")
-                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BadDeeds");
+                    b.ToTable("BalanceHistory");
                 });
 
             modelBuilder.Entity("ObedientChild.Domain.Child", b =>
@@ -360,7 +373,7 @@ namespace ObedientChild.Infrastructure.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<int>("GoodDeedId")
+                    b.Property<int>("DeedId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
@@ -368,43 +381,12 @@ namespace ObedientChild.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GoodDeedId");
+                    b.HasIndex("DeedId");
 
                     b.ToTable("ChildTasks");
                 });
 
-            modelBuilder.Entity("ObedientChild.Domain.CoinHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ChildId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CoinHistory");
-                });
-
-            modelBuilder.Entity("ObedientChild.Domain.GoodDeed", b =>
+            modelBuilder.Entity("ObedientChild.Domain.Deed", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -423,9 +405,12 @@ namespace ObedientChild.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.ToTable("GoodDeeds");
+                    b.ToTable("Deeds");
                 });
 
             modelBuilder.Entity("ObedientChild.Domain.HabitHistory", b =>
@@ -442,7 +427,7 @@ namespace ObedientChild.Infrastructure.Migrations
                     b.Property<DateOnly>("Day")
                         .HasColumnType("date");
 
-                    b.Property<int>("HabitId")
+                    b.Property<int>("DeedId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
@@ -455,7 +440,7 @@ namespace ObedientChild.Infrastructure.Migrations
 
             modelBuilder.Entity("ObedientChild.Domain.Habits.ChildHabit", b =>
                 {
-                    b.Property<int>("HabitId")
+                    b.Property<int>("DeedId")
                         .HasColumnType("integer");
 
                     b.Property<int>("ChildId")
@@ -467,33 +452,11 @@ namespace ObedientChild.Infrastructure.Migrations
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
-                    b.HasKey("HabitId", "ChildId");
+                    b.HasKey("DeedId", "ChildId");
+
+                    b.HasIndex("ChildId");
 
                     b.ToTable("ChildHabits");
-                });
-
-            modelBuilder.Entity("ObedientChild.Domain.Habits.Habit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Habits");
                 });
 
             modelBuilder.Entity("ObedientChild.Domain.LifeEnergy.LifeEnergyAccount", b =>
@@ -527,7 +490,7 @@ namespace ObedientChild.Infrastructure.Migrations
                     b.ToTable("TrusteeLifeEnergyAccounts");
                 });
 
-            modelBuilder.Entity("ObedientChild.Domain.LifeEnergyHistory", b =>
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.CharacterTrait", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -535,13 +498,53 @@ namespace ObedientChild.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Amount")
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CharacterTraits");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.CharacterTraitDeed", b =>
+                {
+                    b.Property<int>("CharacterTraitId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("DeedId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("LifeEnergyAccountId")
+                    b.HasKey("CharacterTraitId", "DeedId");
+
+                    b.HasIndex("DeedId");
+
+                    b.ToTable("CharacterTraitsDeeds");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.CharacterTraitLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CharacterTraitId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NeedExperience")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
@@ -549,10 +552,54 @@ namespace ObedientChild.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LifeEnergyHistory");
+                    b.HasIndex("CharacterTraitId");
+
+                    b.ToTable("CharacterTraitsLevel");
                 });
 
-            modelBuilder.Entity("ObedientChild.Domain.Reward", b =>
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.CharacterTraitPersonality", b =>
+                {
+                    b.Property<int>("PersonalityId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CharacterTraitId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("PersonalityId", "CharacterTraitId");
+
+                    b.HasIndex("CharacterTraitId");
+
+                    b.ToTable("PersonalitiesCharacterTraits");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.ChildCharacterTrait", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CharacterTraitId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Experience")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterTraitId");
+
+                    b.ToTable("ChildCharacterTraits");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.Destiny", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -561,19 +608,51 @@ namespace ObedientChild.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rewards");
+                    b.ToTable("Destinies");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.DestinyPersonality", b =>
+                {
+                    b.Property<int>("DestinyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PersonalityId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DestinyId", "PersonalityId");
+
+                    b.HasIndex("PersonalityId");
+
+                    b.ToTable("DestiniesPersonalities");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.Personality", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Personalities");
                 });
 
             modelBuilder.Entity("ObedientChild.Domain.Trustee", b =>
@@ -664,13 +743,32 @@ namespace ObedientChild.Infrastructure.Migrations
 
             modelBuilder.Entity("ObedientChild.Domain.ChildTask", b =>
                 {
-                    b.HasOne("ObedientChild.Domain.GoodDeed", "GoodDeed")
+                    b.HasOne("ObedientChild.Domain.Deed", "Deed")
                         .WithMany()
-                        .HasForeignKey("GoodDeedId")
+                        .HasForeignKey("DeedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("GoodDeed");
+                    b.Navigation("Deed");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Habits.ChildHabit", b =>
+                {
+                    b.HasOne("ObedientChild.Domain.Child", "Child")
+                        .WithMany()
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ObedientChild.Domain.Deed", "Deed")
+                        .WithMany()
+                        .HasForeignKey("DeedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Child");
+
+                    b.Navigation("Deed");
                 });
 
             modelBuilder.Entity("ObedientChild.Domain.LifeEnergy.TrusteeLifeEnergyAccount", b =>
@@ -690,6 +788,109 @@ namespace ObedientChild.Infrastructure.Migrations
                     b.Navigation("LifeEnergyAccount");
 
                     b.Navigation("Trustee");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.CharacterTraitDeed", b =>
+                {
+                    b.HasOne("ObedientChild.Domain.Personalities.CharacterTrait", "CharacterTrait")
+                        .WithMany("CharacterTraitDeeds")
+                        .HasForeignKey("CharacterTraitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ObedientChild.Domain.Deed", "Deed")
+                        .WithMany("CharacterTraitDeeds")
+                        .HasForeignKey("DeedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CharacterTrait");
+
+                    b.Navigation("Deed");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.CharacterTraitLevel", b =>
+                {
+                    b.HasOne("ObedientChild.Domain.Personalities.CharacterTrait", null)
+                        .WithMany("Levels")
+                        .HasForeignKey("CharacterTraitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.CharacterTraitPersonality", b =>
+                {
+                    b.HasOne("ObedientChild.Domain.Personalities.CharacterTrait", "CharacterTrait")
+                        .WithMany("CharacterTraitsPersonalities")
+                        .HasForeignKey("CharacterTraitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ObedientChild.Domain.Personalities.Personality", "Personality")
+                        .WithMany("CharacterTraitsPersonalities")
+                        .HasForeignKey("PersonalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CharacterTrait");
+
+                    b.Navigation("Personality");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.ChildCharacterTrait", b =>
+                {
+                    b.HasOne("ObedientChild.Domain.Personalities.CharacterTrait", "CharacterTrait")
+                        .WithMany()
+                        .HasForeignKey("CharacterTraitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CharacterTrait");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.DestinyPersonality", b =>
+                {
+                    b.HasOne("ObedientChild.Domain.Personalities.Destiny", "Destiny")
+                        .WithMany("DestiniesPersonalities")
+                        .HasForeignKey("DestinyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ObedientChild.Domain.Personalities.Personality", "Personality")
+                        .WithMany("DestiniesPersonalities")
+                        .HasForeignKey("PersonalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Destiny");
+
+                    b.Navigation("Personality");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Deed", b =>
+                {
+                    b.Navigation("CharacterTraitDeeds");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.CharacterTrait", b =>
+                {
+                    b.Navigation("CharacterTraitDeeds");
+
+                    b.Navigation("CharacterTraitsPersonalities");
+
+                    b.Navigation("Levels");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.Destiny", b =>
+                {
+                    b.Navigation("DestiniesPersonalities");
+                });
+
+            modelBuilder.Entity("ObedientChild.Domain.Personalities.Personality", b =>
+                {
+                    b.Navigation("CharacterTraitsPersonalities");
+
+                    b.Navigation("DestiniesPersonalities");
                 });
 #pragma warning restore 612, 618
         }

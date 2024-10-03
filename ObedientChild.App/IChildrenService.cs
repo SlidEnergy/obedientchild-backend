@@ -11,15 +11,11 @@ namespace ObedientChild.App
 
         Task<ChildView> GetByIdAsync(int childId);
 
-        System.Threading.Tasks.Task SaveAvatarAsync(int childId, byte[] image);
+        Task SaveAvatarAsync(int childId, byte[] image);
 
         Task<int> EarnCountAsync(int childId, int count);
-        
-        Task<int> EarnAsync(int childId, Reward reward);
 
         Task<int> SpendCountAsync(int childId, int count);
-
-        Task<int> SpendAsync(int childId, Reward reward);
 
         Task SetGoalAsync(int id, int rewardId);
 

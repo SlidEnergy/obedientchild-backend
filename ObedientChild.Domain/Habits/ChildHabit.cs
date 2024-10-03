@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ObedientChild.Domain.Habits
 {
@@ -6,7 +7,11 @@ namespace ObedientChild.Domain.Habits
     {
         public int ChildId { get; set; }
 
-        public int HabitId { get; set; }
+        public virtual Child Child { get; set; }
+
+        public int DeedId { get; set; }
+
+        public virtual Deed Deed { get; set; }
 
         public DateOnly StartDate { get; set; }
 
@@ -20,7 +25,7 @@ namespace ObedientChild.Domain.Habits
         public ChildHabit(int childId, int habitId)
         {
             ChildId = childId;
-            HabitId = habitId;
+            DeedId = habitId;
             StartDate = DateOnly.FromDateTime(DateTime.Today);
         }
     }

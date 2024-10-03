@@ -18,9 +18,9 @@ namespace ObedientChild.App.Habits
 
         public HabitHistoryStatus Status { get; set; }
 
-        private Habit _model;
+        private Deed _model;
 
-        public DayHabit(DateOnly day, Habit model, HabitHistoryStatus status)
+        public DayHabit(DateOnly day, Deed model, HabitHistoryStatus status)
         {
             Day = day;
             _model = model;

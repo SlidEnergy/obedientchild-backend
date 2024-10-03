@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ObedientChild.App.Balance;
 using ObedientChild.Domain;
 using ObedientChild.Domain.Habits;
 using ObedientChild.Domain.Tasks;
@@ -12,12 +13,14 @@ namespace ObedientChild.App.Habits
     public class ChildTasksService : IChildTasksService
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICoinHistoryFactory _historyFactory;
+        private readonly IBalanceHistoryFactory _historyFactory;
+        private readonly IBalanceService _balanceService;
 
-        public ChildTasksService(IApplicationDbContext context, ICoinHistoryFactory historyFactory)
+        public ChildTasksService(IApplicationDbContext context, IBalanceHistoryFactory historyFactory, IBalanceService balanceService)
         {
             _context = context;
             _historyFactory = historyFactory;
+            _balanceService = balanceService;
         }
 
         public async Task<List<ChildTask>> GetListAsync()
@@ -27,7 +30,7 @@ namespace ObedientChild.App.Habits
 
         public async Task<List<ChildTask>> GetListForDayAsync(int childId, DateOnly day)
         {
-            return await _context.ChildTasks.Include(x => x.GoodDeed)
+            return await _context.ChildTasks.Include(x => x.Deed)
                 .Where(x => x.ChildId == childId && day == x.Date)
                 .ToListAsync();
         }
@@ -55,14 +58,14 @@ namespace ObedientChild.App.Habits
             }
         }
 
-        public async Task<ChildTask> SetStatusAsync(int id, int childId, ChildTaskStatus status)
+        public async Task<ChildTask> SetStatusAsync(string userId, int childTaskId, int childId, ChildTaskStatus status)
         {
             var child = await _context.Children.FindAsync(childId);
 
             if (child == null)
                 return null;
 
-            var childTask = await _context.ChildTasks.Include(x => x.GoodDeed).SingleOrDefaultAsync(x => x.Id == id);
+            var childTask = await _context.ChildTasks.Include(x => x.Deed).ThenInclude(x => x.CharacterTraitDeeds).SingleOrDefaultAsync(x => x.Id == childTaskId);
 
             if (childTask == null)
                 return null;
@@ -77,20 +80,23 @@ namespace ObedientChild.App.Habits
             if ((childTask.Status == ChildTaskStatus.Done && status == ChildTaskStatus.ToDo) ||
                 (childTask.Status == ChildTaskStatus.ToDo && status == ChildTaskStatus.Failed))
             {
-                var coinHistory = _historyFactory.CreateSpendGoodDeed(childId, childTask.GoodDeed);
-                _context.CoinHistory.Add(coinHistory);
+                var coinHistory = _historyFactory.Create(childId, childTask.Deed, true);
+                await _balanceService.SpendCoinAsync(child, childTask.Deed.Price, coinHistory.CloneProps());
 
-                child.SpendCoin(childTask.GoodDeed.Price);
+                if (childTask.Deed.CharacterTraitIds != null)
+                    await _balanceService.LoseExperienceAsync(childId, childTask.Deed.CharacterTraitIds, childTask.Deed.Price, coinHistory.CloneProps());
             }
 
             if ((childTask.Status == ChildTaskStatus.Failed && status == ChildTaskStatus.ToDo) ||
                 (childTask.Status == ChildTaskStatus.ToDo && status == ChildTaskStatus.Done))
             {
-                var coinHistory = _historyFactory.CreateEarnGoodDeed(childId, childTask.GoodDeed);
-                _context.CoinHistory.Add(coinHistory);
+                var coinHistory = _historyFactory.Create(childId, childTask.Deed);
+                await _balanceService.EarnCoinAsync(child, childTask.Deed.Price, coinHistory.CloneProps());
 
-                child.EarnCoin(childTask.GoodDeed.Price);
-                await _context.SaveChangesAsync();
+                if(childTask.Deed.CharacterTraitIds != null)
+                    await _balanceService.AddExperienceAsync(childId, childTask.Deed.CharacterTraitIds, childTask.Deed.Price, coinHistory.CloneProps());
+
+                await _balanceService.PowerDownLifeEnergyAsync(userId, childTask.Deed.Price, coinHistory.CloneProps());
             }
 
             childTask.Status = status;

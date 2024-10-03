@@ -12,9 +12,9 @@ namespace ObedientChild.WebApi
     public class CoinHistoryController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly ICoinHistoryService _service;
+        private readonly IBalanceHistoryService _service;
 
-        public CoinHistoryController(IMapper mapper, ICoinHistoryService service)
+        public CoinHistoryController(IMapper mapper, IBalanceHistoryService service)
         {
             _mapper = mapper;
             _service = service;
@@ -22,16 +22,16 @@ namespace ObedientChild.WebApi
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<CoinHistory>>> GetList([FromQuery]int childId = 0)
+        public async Task<ActionResult<IEnumerable<BalanceHistory>>> GetList([FromQuery]BalanceType type, [FromQuery] int childId = 0)
         {
-            var list = await _service.GetListAsync(childId);
+            var list = await _service.GetListAsync(childId, type);
 
             return list;
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<CoinHistory>> GetById(int id)
+        public async Task<ActionResult<BalanceHistory>> GetById(int id)
         {
             var item = await _service.GetByIdAsync(id);
 
@@ -39,7 +39,7 @@ namespace ObedientChild.WebApi
         }
 
         [HttpDelete("{id}")]
-        public async System.Threading.Tasks.Task Revert(int id)
+        public async Task Revert(int id)
         {
             await _service.RevertAsync(id);
         }

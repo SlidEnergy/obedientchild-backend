@@ -1,14 +1,11 @@
-﻿using System.Collections;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ObedientChild.App;
 using ObedientChild.Domain;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Slid.Auth.Core;
 
 namespace ObedientChild.WebApi
 {
@@ -44,7 +41,7 @@ namespace ObedientChild.WebApi
         }
 
         [HttpPost("{id}/avatar")]
-        public async System.Threading.Tasks.Task SaveAvatar(int id, IFormFile image)
+        public async Task SaveAvatar(int id, IFormFile image)
         {
             if (ModelState.IsValid)
             {
@@ -88,14 +85,6 @@ namespace ObedientChild.WebApi
             return balance;
         }
 
-        [HttpPut("{id}/earn")]
-        public async Task<int> EarnCoin(int id, [FromBody]Reward reward)
-        {
-            var balance = await _childrenService.EarnAsync(id, reward);
-
-            return balance;
-        }
-
         [HttpPut("{id}/spend/{count}")]
         public async Task<int> SpendCoinPut(int id, int count)
         {
@@ -108,14 +97,6 @@ namespace ObedientChild.WebApi
         public async Task<int> SpendCoinPost(int id, int count)
         {
             var balance = await _childrenService.SpendCountAsync(id, count);
-
-            return balance;
-        }
-
-        [HttpPut("{id}/spend")]
-        public async Task<int> SpendCoin(int id, [FromBody]Reward reward)
-        {
-            var balance = await _childrenService.SpendAsync(id, reward);
 
             return balance;
         }

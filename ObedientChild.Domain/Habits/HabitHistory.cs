@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ObedientChild.Domain
 {
@@ -8,7 +9,7 @@ namespace ObedientChild.Domain
 
         public int ChildId { get; set; }
 
-        public int HabitId { get; set; }
+        public int DeedId { get; set; }
 
         public HabitHistoryStatus Status { get; set; }
 
@@ -23,7 +24,7 @@ namespace ObedientChild.Domain
         {
             Day = day;
             ChildId = childId;
-            HabitId = habitId;
+            DeedId = habitId;
             Status = status;
         }
     }

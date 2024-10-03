@@ -15,17 +15,17 @@ namespace ObedientChild.Domain
 
         public DateOnly Date { get; set; }
 
-        public int GoodDeedId { get; set; }
+        public int DeedId { get; set; }
 
-        public virtual GoodDeed GoodDeed { get; set; }
+        public virtual Deed Deed { get; set; }
 
         public ChildTaskStatus Status { get; set; }
 
-        public ChildTask(int childId, DateOnly date, int goodDeedId) 
+        public ChildTask(int childId, DateOnly date, int deedId) 
         {
             ChildId = childId;
             Date = date;
-            GoodDeedId = goodDeedId;
+            DeedId = deedId;
             Status = ChildTaskStatus.ToDo;
         }
     }

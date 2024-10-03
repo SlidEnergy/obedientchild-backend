@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ObedientChild.App.Balance;
 using ObedientChild.Domain;
 using ObedientChild.Domain.Habits;
 
@@ -11,51 +12,36 @@ namespace ObedientChild.App.Habits
     public class HabitsService : IHabitsService
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICoinHistoryFactory _historyFactory;
+        private readonly IBalanceHistoryFactory _historyFactory;
+        private readonly IBalanceService _balanceService;
 
-        public HabitsService(IApplicationDbContext context, ICoinHistoryFactory historyFactory)
+        public HabitsService(IApplicationDbContext context, IBalanceHistoryFactory historyFactory, IBalanceService balanceService)
         {
             _context = context;
             _historyFactory = historyFactory;
-        }
-
-        public async Task<List<Habit>> GetListAsync()
-        {
-            return await _context.Habits.ToListAsync();
+            _balanceService = balanceService;
         }
 
         public async Task<List<DayHabit>> GetListForDayAsync(int childId, DateOnly day)
         {
             var habits = await _context.ChildHabits
                 .Where(x => x.ChildId == childId && day >= x.StartDate && x.EndDate == null)
-                .Join(_context.Habits, ch => ch.HabitId, h => h.Id, (ch, h) => h)
+                .Join(_context.Deeds, ch => ch.DeedId, h => h.Id, (ch, h) => h)
                 .Select(x => new DayHabit(day, x, HabitHistoryStatus.None))
                 .ToListAsync();
 
             var history = await _context.HabitHistory
                 .Where(x => x.ChildId == childId && x.Day == day)
-                .Join(_context.Habits, hh => hh.HabitId, h => h.Id, (hh, h) => new { HabitHistory = hh, Habit = h })
+                .Join(_context.Deeds, hh => hh.DeedId, h => h.Id, (hh, h) => new { HabitHistory = hh, Habit = h })
                 .Select(x => new DayHabit(day, x.Habit, x.HabitHistory.Status))
                 .ToListAsync();
 
             return history.UnionBy(habits, x => x.HabitId).ToList();
         }
 
-        public async Task<Habit> GetByIdAsync(int id)
+        public async Task SetForChildAsync(int childId, int habitId)
         {
-            return await _context.Habits.FindAsync(id);
-        }
-
-        public async System.Threading.Tasks.Task AddAsync(Habit model)
-        {
-            _context.Habits.Add(model);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async System.Threading.Tasks.Task SetForChildAsync(int childId, int habitId)
-        {
-            var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.HabitId == habitId && x.ChildId == childId);
+            var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.DeedId == habitId && x.ChildId == childId);
 
             if (model != null)
             {
@@ -69,16 +55,16 @@ namespace ObedientChild.App.Habits
             await _context.SaveChangesAsync();
         }
 
-        public async System.Threading.Tasks.Task UnsetForChildAsync(int id, int childId, DateOnly day)
+        public async Task UnsetForChildAsync(int id, int childId, DateOnly day)
         {
-            var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.HabitId == id && x.ChildId == childId);
+            var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.DeedId == id && x.ChildId == childId);
 
             if (model != null)
             {
                 model.EndDate = day;
             }
 
-            var history = await _context.HabitHistory.FirstOrDefaultAsync(x => x.Day == day && x.HabitId == id && x.ChildId == childId);
+            var history = await _context.HabitHistory.FirstOrDefaultAsync(x => x.Day == day && x.DeedId == id && x.ChildId == childId);
 
             if (history != null)
             {
@@ -88,27 +74,16 @@ namespace ObedientChild.App.Habits
             await _context.SaveChangesAsync();
         }
 
-        public async System.Threading.Tasks.Task DeleteAsync(int id)
-        {
-            var model = await _context.Habits.FindAsync(id);
-
-            if (model != null)
-            {
-                _context.Habits.Remove(model);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task<HabitHistory> SetStatusAsync(int habitId, int childId, DateOnly day, HabitHistoryStatus status)
+        public async Task<HabitHistory> SetStatusAsync(int habitId, int childId, DateOnly day, HabitHistoryStatus status, string userId = null)
         {
             var child = await _context.Children.FindAsync(childId);
 
-            var habit = await _context.Habits.FirstOrDefaultAsync(x => x.Id == habitId);
+            var habit = await _context.Deeds.Include(x => x.CharacterTraitDeeds).FirstOrDefaultAsync(x => x.Id == habitId);
 
             if (habit == null)
                 return null;
 
-            var habitHistory = await _context.HabitHistory.FirstOrDefaultAsync(x => x.HabitId == habitId && x.ChildId == childId && x.Day == day);
+            var habitHistory = await _context.HabitHistory.FirstOrDefaultAsync(x => x.DeedId == habitId && x.ChildId == childId && x.Day == day);
 
             // update or remove entry
             if (habitHistory != null)
@@ -116,7 +91,7 @@ namespace ObedientChild.App.Habits
                 if (habitHistory.Status == status)
                     return null;
 
-                if(habitHistory.Status == HabitHistoryStatus.None)
+                if (habitHistory.Status == HabitHistoryStatus.None)
                     throw new InvalidOperationException("Doesn't support operations habbit history with status None");
 
                 if (status != HabitHistoryStatus.None)
@@ -125,18 +100,22 @@ namespace ObedientChild.App.Habits
                 // Rollback coin history and spend/earn
                 if (habitHistory.Status == HabitHistoryStatus.Done)
                 {
-                    var coinHistory = _historyFactory.CreateSpendHabit(childId, habit);
-                    _context.CoinHistory.Add(coinHistory);
+                    var logEntry = _historyFactory.Create(childId, habit, true);
 
-                    child.SpendCoin(habit.Price);
+                    await _balanceService.SpendCoinAsync(child, habit.Price, logEntry.CloneProps());
+
+                    if (habit.CharacterTraitIds != null)
+                        await _balanceService.LoseExperienceAsync(childId, habit.CharacterTraitIds, habit.Price, logEntry.CloneProps());
+
+                    if(userId != null)
+                        await _balanceService.PowerUpLifeEnergyAsync(userId, habit.Price, logEntry.CloneProps());
                 }
 
                 if (habitHistory.Status == HabitHistoryStatus.Failed)
                 {
-                    var coinHistory = _historyFactory.CreateEarnHabit(childId, habit);
-                    _context.CoinHistory.Add(coinHistory);
+                    var logEntry = _historyFactory.Create(childId, habit);
 
-                    child.EarnCoin(habit.Price);
+                    await _balanceService.EarnCoinAsync(child, habit.Price, logEntry.CloneProps());
                 }
 
                 _context.HabitHistory.Remove(habitHistory);
@@ -147,24 +126,28 @@ namespace ObedientChild.App.Habits
             // create entry
             else
             {
-                var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.HabitId == habitId && x.ChildId == childId);
+                var model = await _context.ChildHabits.FirstOrDefaultAsync(x => x.DeedId == habitId && x.ChildId == childId);
 
                 if (model != null)
                 {
                     if (status == HabitHistoryStatus.Done)
                     {
-                        var coinHistory = _historyFactory.CreateEarnHabit(childId, habit);
-                        _context.CoinHistory.Add(coinHistory);
+                        var logEntry = _historyFactory.Create(childId, habit);
 
-                        child.EarnCoin(habit.Price);
+                        await _balanceService.EarnCoinAsync(child, habit.Price, logEntry.CloneProps());
+
+                        if (habit.CharacterTraitIds != null)
+                            await _balanceService.AddExperienceAsync(childId, habit.CharacterTraitIds, habit.Price, logEntry.CloneProps());
+
+                        if(userId != null)
+                            await _balanceService.PowerDownLifeEnergyAsync(userId, habit.Price, logEntry.CloneProps());
                     }
 
                     if (status == HabitHistoryStatus.Failed)
                     {
-                        var coinHistory = _historyFactory.CreateSpendHabit(childId, habit);
-                        _context.CoinHistory.Add(coinHistory);
+                        var logEntry = _historyFactory.Create(childId, habit, true);
 
-                        child.SpendCoin(habit.Price);
+                        await _balanceService.SpendCoinAsync(child, habit.Price, logEntry.CloneProps());
                     }
 
                     var newHabitHistory = new HabitHistory(day, childId, habitId, status);
@@ -176,15 +159,6 @@ namespace ObedientChild.App.Habits
             }
 
             return null;
-        }
-
-        public async Task<Habit> UpdateAsync(Habit model)
-        {
-            _context.Entry(model).State = EntityState.Modified;
-
-            await _context.SaveChangesAsync();
-
-            return model;
         }
 
         public async Task<WeekHabitStatistic> GetStatisticsAsync(int childId, DateOnly startDay, DateOnly endDay)

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using ObedientChild.App;
 using ObedientChild.Domain;
+using ObedientChild.Domain.Habits;
 using ObedientChild.Infrastructure;
 
 namespace ObedientChild.WebApi
@@ -25,6 +27,13 @@ namespace ObedientChild.WebApi
             CreateMap<Child, Dto.Child>()
                .ForMember(dest => dest.Avatar,
                    opt => opt.MapFrom(src => "data:image/png;base64," + Convert.ToBase64String(src.Avatar)));
+
+            CreateMap<DeedDto, Deed>()
+                .ForMember(dest => dest.CharacterTraitDeeds, opt => opt.Ignore()) // Игнорируем связь, будем работать вручную
+                .ForMember(dest => dest.CharacterTraitIds, opt => opt.Ignore()); // Игнорируем связь, будем работать вручную
+
+            CreateMap<Deed, DeedDto>()
+                .ForMember(dest => dest.CharacterTraitIds, opt => opt.MapFrom(src => src.CharacterTraitDeeds.Select(ct => ct.CharacterTraitId).ToList()));
         }
     }
 }

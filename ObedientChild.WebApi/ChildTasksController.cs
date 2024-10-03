@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ObedientChild.App;
 using ObedientChild.App.Habits;
 using ObedientChild.Domain;
 using ObedientChild.Domain.Habits;
 using ObedientChild.Domain.Tasks;
+using Slid.Auth.Core;
 
 namespace ObedientChild.WebApi
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class ChildTasksController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -77,7 +80,9 @@ namespace ObedientChild.WebApi
         [HttpPost("{id}/status")]
         public async Task<ActionResult<ChildTask>> SetStatus(int id, [FromQuery] int childId, [FromQuery] ChildTaskStatus status)
         {
-            return await _service.SetStatusAsync(id, childId, status);
+            var userId = User.GetUserId();
+
+            return await _service.SetStatusAsync(userId, id, childId, status);
         }
     }
 }

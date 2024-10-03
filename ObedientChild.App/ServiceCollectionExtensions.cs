@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ObedientChild.App.Alice;
 using ObedientChild.App.Habits;
+using ObedientChild.App.Personalities;
 
 namespace ObedientChild.App
 {
@@ -11,15 +12,16 @@ namespace ObedientChild.App
 			services.AddScoped<IUsersService, UsersService>();
 			services.AddScoped<IAuthTokenService, AuthTokenService>();
 			services.AddScoped<IChildrenService, ChildrenService>();
-			services.AddScoped<IRewardsService, RewardsService>();
-			services.AddScoped<IGoodDeedService, GoodDeedService>();
-			services.AddScoped<IBadDeedService, BadDeedService>();
-			services.AddScoped<ICoinHistoryService, CoinHistoryService>();
-			services.AddScoped<ICoinHistoryFactory, CoinHistoryFactory>();
+			services.AddScoped<IBalanceHistoryService, BalanceHistoryService>();
+			services.AddScoped<IBalanceHistoryFactory, BalanceHistoryFactory>();
 			services.AddScoped<IHabitsService, HabitsService>();
 			services.AddScoped<IChildTasksService, ChildTasksService>();
 			services.AddScoped<ILifeEnergyService, LifeEnergyService>();
 			services.AddScoped<IAliceService, AliceService>();
+			services.AddScoped<ICharacterTraitsService, CharacterTraitsService>();
+			services.AddScoped<IPersonalitiesService, PersonalitiesService>();
+			services.AddScoped<IBalanceService, BalanceService>();
+			services.AddScoped<IDeedsService, DeedsService>();
 
 			return services;
 		}

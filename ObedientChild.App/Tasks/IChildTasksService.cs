@@ -13,7 +13,7 @@ namespace ObedientChild.App.Habits
         Task<ChildTask> GetByIdAsync(int id);
         Task<List<ChildTask>> GetListAsync();
         Task<List<ChildTask>> GetListForDayAsync(int childId, DateOnly day);
-        Task<ChildTask> SetStatusAsync(int id, int childId, ChildTaskStatus status);
+        Task<ChildTask> SetStatusAsync(string userId, int childTaskId, int childId, ChildTaskStatus status);
         Task<ChildTask> UpdateAsync(ChildTask model);
     }
 }

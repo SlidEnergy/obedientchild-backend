@@ -9,7 +9,7 @@ namespace ObedientChild.App.Habits
     {
         public DateOnly Day { get; set; }
 
-        public int GoodDeedId => _model.Id;
+        public int DeedId => _model.Id;
 
         public string Title => _model.Title;
 
@@ -19,9 +19,9 @@ namespace ObedientChild.App.Habits
 
         public ChildTaskStatus Status { get; set; }
 
-        private GoodDeed _model;
+        private Deed _model;
 
-        public DayTask(DateOnly day, GoodDeed model, ChildTaskStatus status)
+        public DayTask(DateOnly day, Deed model, ChildTaskStatus status)
         {
             Day = day;
             _model = model;

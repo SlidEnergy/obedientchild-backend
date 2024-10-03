@@ -13,5 +13,25 @@ namespace ObedientChild.Domain.LifeEnergy
         public int Balance { get; set; }
 
         public LifeEnergyAccount() { }
+
+        public int PowerUp(int amount)
+        {
+            Balance += amount;
+            
+            if(Balance < 0)
+                Balance = 0;
+
+            return Balance;
+        }
+
+        public int PowerDown(int amount)
+        {
+            Balance -= amount;
+
+            if (Balance < 0)
+                Balance = 0;
+
+            return Balance;
+        }
     }
 }

@@ -2,9 +2,10 @@
 {
     public enum CoinHistoryType
     {
-        Manual,
-        GoodDeed,
-        BadDeed,
-        Habit
+        Manual = 0,
+        GoodDeed = 1,
+        BadDeed = 2,
+        Habit = 3,
+        Reward = 4
     }
 }

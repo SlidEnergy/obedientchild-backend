@@ -30,14 +30,5 @@ namespace ObedientChild.App
                 .Join(context.LifeEnergyAccounts, t => t.LifeEnergyAccountId, a => a.Id, (t, a) => a)
                 .SingleOrDefaultAsync();
         }
-
-        public static async Task<LifeEnergyHistory> GetLifeEnergyHistoryWithAccessCheckAsync(this IApplicationDbContext context, string userId, int id)
-        {
-            return await context.Users
-                .Where(x => x.Id == userId)
-                .Join(context.TrusteeLifeEnergyAccounts, u => u.TrusteeId, t => t.TrusteeId, (u, t) => t)
-                .Join(context.LifeEnergyHistory, t => t.LifeEnergyAccountId, h => h.LifeEnergyAccountId, (t, h) => h)
-                .SingleOrDefaultAsync(x => x.Id == id);
-        }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using ObedientChild.Domain.Habits;
 using ObedientChild.Domain.LifeEnergy;
+using ObedientChild.Domain.Personalities;
 
 namespace ObedientChild.App
 {
@@ -21,15 +22,9 @@ namespace ObedientChild.App
 
 		DbSet<Child> Children { get; set; }
 
-        DbSet<Reward> Rewards { get; set; }
+        DbSet<Deed> Deeds { get; set; }
 
-        DbSet<GoodDeed> GoodDeeds { get; set; }
-
-        DbSet<Habit> Habits { get; set; }
-
-        DbSet<BadDeed> BadDeeds { get; set; }
-
-		DbSet<CoinHistory> CoinHistory { get; set; }
+		DbSet<BalanceHistory> BalanceHistory { get; set; }
 		DbSet<HabitHistory> HabitHistory { get; set; }
 		DbSet<ChildHabit> ChildHabits { get; set; }
 
@@ -39,9 +34,21 @@ namespace ObedientChild.App
 
         DbSet<TrusteeLifeEnergyAccount> TrusteeLifeEnergyAccounts { get; set; }
 
-        DbSet<LifeEnergyHistory> LifeEnergyHistory { get; set; }
-
         DbSet<LifeEnergyAccount> LifeEnergyAccounts { get; set; }
+
+        DbSet<Destiny> Destinies{ get; set; }
+        DbSet<Personality> Personalities { get; set; }
+
+        DbSet<CharacterTrait> CharacterTraits { get; set; }
+
+        DbSet<CharacterTraitLevel> CharacterTraitsLevel { get; set; }
+
+        DbSet<ChildCharacterTrait> ChildCharacterTraits { get; set; }
+
+        DbSet<CharacterTraitPersonality> PersonalitiesCharacterTraits { get; set; }
+
+        DbSet<DestinyPersonality> DestiniesPersonalities { get; set; }
+        DbSet<CharacterTraitDeed> CharacterTraitsDeeds { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 

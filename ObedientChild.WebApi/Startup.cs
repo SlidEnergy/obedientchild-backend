@@ -333,6 +333,7 @@ namespace ObedientChild.WebApi
             {
                 googleAuth = new GoogleAuthOptions
                 {
+                    FrontendRedirectUrl = Environment.GetEnvironmentVariable("GOOGLE_FRONTEND_REDIRECT_URL"),
                     RedirectUrl = Environment.GetEnvironmentVariable("GOOGLE_REDIRECT_URL"),
                     ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET"),
                     ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID"),

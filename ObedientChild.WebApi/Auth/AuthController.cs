@@ -51,7 +51,7 @@ namespace ObedientChild.WebApi.Auth
             await _tokenService.SetTokenAsync(user.Id, token, Domain.AuthTokenType.GoogleAccessToken);
 
             // Редирект на домашнюю страницу или страницу после логина
-            return Redirect("/settings?googleAccessToken=" + googleAccessToken);
+            return Redirect(_options.FrontendRedirectUrl + "?googleAccessToken=" + googleAccessToken);
         }
 
         private async Task<string> GetAccessTokenAsync(string authorizationCode)

@@ -28,7 +28,7 @@ namespace ObedientChild.WebApi
 
             try
             {
-                var tokens = await _tokenService.CheckCredentialsAndGetToken(userData.Email, userData.Password);
+                var tokens = await _tokenService.CheckCredentialsAndGetTokenAsync(userData.Email, userData.Password);
 
                 return new TokenInfo() { Token = tokens.Token, RefreshToken = tokens.RefreshToken, Email = userData.Email };
             }
@@ -43,7 +43,7 @@ namespace ObedientChild.WebApi
         {
             try
             {
-                var newTokens = await _tokenService.RefreshToken(tokens.Token, tokens.RefreshToken);
+                var newTokens = await _tokenService.RefreshTokenAsync(tokens.Token, tokens.RefreshToken);
 
 				return new TokenInfo() { Token = newTokens.Token, RefreshToken = newTokens.RefreshToken };
             }

@@ -6,10 +6,12 @@ namespace ObedientChild.WebApi
 {
 	public interface ITokenService
 	{
-		Task<TokensCortage> GenerateAccessAndRefreshTokens(ApplicationUser user, AccessMode accessMode);
-		Task<string> GenerateToken(ApplicationUser user, AuthTokenType type);
+		Task<TokensCortage> CreateAccessAndRefreshTokensAsync(ApplicationUser user, AccessMode accessMode);
+		Task<string> CreateTokenAsync(string userId, AuthTokenType type);
 		//Task<TokensCortage> RefreshImportToken(string refreshToken);
-		Task<TokensCortage> RefreshToken(string token, string refreshToken);
-		Task<TokensCortage> CheckCredentialsAndGetToken(string email, string password);
+		Task SetTokenAsync(string userId, string token, AuthTokenType type);
+
+        Task<TokensCortage> RefreshTokenAsync(string token, string refreshToken);
+		Task<TokensCortage> CheckCredentialsAndGetTokenAsync(string email, string password);
 	}
 }

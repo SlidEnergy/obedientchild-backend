@@ -43,13 +43,13 @@ namespace ObedientChild.WebApi
 		//	return new TokensCortage() { Token = newToken, RefreshToken = newRefreshToken };
 		//}
 
-		public async Task<TokensCortage> RefreshToken(string token, string refreshToken)
+		public async Task<TokensCortage> RefreshTokenAsync(string token, string refreshToken)
 		{
 			var principal = GetPrincipalFromExpiredToken(token);
 			var userId = principal.GetUserId();
-			var savedToken = await _authTokenService.FindAnyToken(refreshToken);
+			var savedToken = await _authTokenService.FindAnyTokenAsync(userId, refreshToken, AuthTokenType.RefreshToken);
 
-			if (savedToken == null || savedToken.User.Id != userId || savedToken.Type != AuthTokenType.RefreshToken)
+			if (savedToken == null)
 				throw new SecurityTokenException("Invalid refresh token");
 
 			var newToken = _tokenGenerator.GenerateAccessToken(principal.Claims);
@@ -60,10 +60,10 @@ namespace ObedientChild.WebApi
 			return new TokensCortage() { Token = newToken, RefreshToken = newRefreshToken };
 		}
 
-		public async Task<TokensCortage> GenerateAccessAndRefreshTokens(ApplicationUser user, AccessMode accessMode)
+		public async Task<TokensCortage> CreateAccessAndRefreshTokensAsync(ApplicationUser user, AccessMode accessMode)
 		{
 			var refreshToken = _tokenGenerator.GenerateRefreshToken();
-			await _authTokenService.AddToken(user.Id, refreshToken, AuthTokenType.RefreshToken);
+			await _authTokenService.AddOrUpdateTokenAsync(user.Id, refreshToken, AuthTokenType.RefreshToken);
 
 			var roles = await _userManager.GetRolesAsync(user);
 
@@ -74,12 +74,17 @@ namespace ObedientChild.WebApi
 			};
 		}
 
-		public async Task<string> GenerateToken(ApplicationUser user, AuthTokenType type)
+		public async Task<string> CreateTokenAsync(string userId, AuthTokenType type)
 		{
 			var importToken = _tokenGenerator.GenerateRefreshToken();
-			await _authTokenService.AddToken(user.Id, importToken, type);
+			await _authTokenService.AddOrUpdateTokenAsync(userId, importToken, type);
 
 			return importToken;
+		}
+
+		public async Task SetTokenAsync(string userId, string token, AuthTokenType type)
+		{
+			await _authTokenService.AddOrUpdateTokenAsync(userId, token, type);
 		}
 
 		private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
@@ -103,7 +108,7 @@ namespace ObedientChild.WebApi
 			return principal;
 		}
 
-		public async Task<TokensCortage> CheckCredentialsAndGetToken(string email, string password)
+		public async Task<TokensCortage> CheckCredentialsAndGetTokenAsync(string email, string password)
 		{
 			var user = await _userManager.FindByNameAsync(email);
 
@@ -115,7 +120,7 @@ namespace ObedientChild.WebApi
 			if (!checkResult)
 				throw new AuthenticationException();
 
-			return await GenerateAccessAndRefreshTokens(user, AccessMode.All);
+			return await CreateAccessAndRefreshTokensAsync(user, AccessMode.All);
 		}
 	}
 }

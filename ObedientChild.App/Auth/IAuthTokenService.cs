@@ -5,8 +5,9 @@ namespace ObedientChild.App
 {
 	public interface IAuthTokenService
 	{
-        System.Threading.Tasks.Task AddToken(string userId, string token, AuthTokenType type);
-		Task<AuthToken> FindAnyToken(string token);
+		Task<AuthToken> GetTokenAsync(string userId, AuthTokenType type);
+        Task AddOrUpdateTokenAsync(string userId, string token, AuthTokenType type);
+		Task<AuthToken> FindAnyTokenAsync(string userId, string token, AuthTokenType type);
 		Task<AuthToken> UpdateToken(AuthToken oldToken, string newToken);
 	}
 }

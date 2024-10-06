@@ -6,43 +6,34 @@ using ObedientChild.Domain;
 using System;
 using System.Threading.Tasks;
 using ObedientChild.WebApi;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace ObedientChild.UnitTests
 {
 	public class AuthTokenServiceTests : TestsBase
 	{
 		private AuthTokenService _service;
-		Mock<ITokenGenerator> _tokenGenerator;
-		Mock<UserManager<ApplicationUser>> _manager;
 
 		[SetUp]
         public void Setup()
         {
-			var authSettings = SettingsFactory.CreateAuth();
-			_tokenGenerator = new Mock<ITokenGenerator>();
-			var store = new Mock<IUserStore<ApplicationUser>>();
-
-			_manager = new Mock<UserManager<ApplicationUser>>(store.Object, null, null, null, null, null, null, null, null);
-			var authTokenService = new Mock<IAuthTokenService>();
-			_service = new AuthTokenService(_manager.Object, _mockedDal);
+			_service = new AuthTokenService(_db);
         }
 
 		[Test]
 		[TestCase(AuthTokenType.RefreshToken)]
 		[TestCase(AuthTokenType.TelegramUserId)]
-		public async System.Threading.Tasks.Task AddToken_ShouldNotBeException(AuthTokenType type)
+		public async Task AddToken_ShouldNotBeException(AuthTokenType type)
 		{
-			_manager.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
-			_authTokens.Setup(x => x.FindAnyToken(It.IsAny<string>())).ReturnsAsync(new AuthToken());
-			_authTokens.Setup(x => x.Add(It.IsAny<AuthToken>())).ReturnsAsync(new AuthToken());
+			_db.Users.Add(_user);
 
 			var token = Guid.NewGuid().ToString();
 
-			await _service.AddToken(_user.Id, token, type);
+			await _service.AddOrUpdateTokenAsync(_user.Id, token, type);
 
-			_manager.Verify(x => x.FindByIdAsync(It.Is<string>(id => id == _user.Id)));
-			_authTokens.Verify(x => x.FindAnyToken((It.Is<string>(t => t == token))));
-			_authTokens.Verify(x => x.Add((It.Is<AuthToken>(t => t.User == _user && t.Token == token))));
+			var authToken = await _db.AuthTokens.SingleOrDefaultAsync(x => x.Token == token && x.Type == type && x.UserId == _user.Id);
+			Assert.That(authToken != null);
 		}
 	}
 }

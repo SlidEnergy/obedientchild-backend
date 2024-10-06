@@ -36,7 +36,7 @@ namespace ObedientChild.WebApi.Auth
 
 				var roles = await _userManager.GetRolesAsync(user);
 
-				var claims = _claimsGenerator.CreateClaims(user, roles, AccessMode.Export);
+				var claims = _claimsGenerator.CreateClaims(user, roles, AccessMode.Restricted);
 
 				var apiKey = new ApiKey(key, user.Id, claims);
 

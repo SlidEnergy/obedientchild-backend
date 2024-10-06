@@ -29,12 +29,7 @@ namespace ObedientChild.WebApi
 		{
 			var userId = User.GetUserId();
 
-			var user = await _usersService.GetByIdAsync(userId);
-
-			if (user == null)
-				throw new AuthenticationException();
-
-			return await _tokenService.GenerateToken(user, AuthTokenType.ApiKey);
+			return await _tokenService.CreateTokenAsync(userId, AuthTokenType.ApiKey);
 		}
 	}
 }

@@ -1,41 +1,52 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ObedientChild.Domain;
 using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace ObedientChild.App
 {
 	public class AuthTokenService : IAuthTokenService
 	{
-		private readonly UserManager<ApplicationUser> _userManager;
-		private readonly DataAccessLayer _dal;
+		private readonly IApplicationDbContext _context;
 
-		public AuthTokenService(UserManager<ApplicationUser> userManager, DataAccessLayer dal)
+		public AuthTokenService(IApplicationDbContext context)
 		{
-			_dal = dal;
-			_userManager = userManager;	
+			_context = context;
 		}
 
-		public async System.Threading.Tasks.Task AddToken(string userId, string token, AuthTokenType type)
+        public async Task<AuthToken> GetTokenAsync(string userId, AuthTokenType type)
+        {
+            return await _context.AuthTokens.SingleOrDefaultAsync(x => x.UserId == userId && x.Type == type);
+        }
+
+        public async Task AddOrUpdateTokenAsync(string userId, string token, AuthTokenType type)
 		{
-			var user = await _userManager.FindByIdAsync(userId);
+			var user = await _context.Users.FindAsync(userId);
 
-			var existToken = await _dal.AuthTokens.FindAnyToken(token);
+			var existToken = await _context.AuthTokens.SingleOrDefaultAsync(x => x.UserId == userId && x.Token == token && x.Type == type);
 
-			if (existToken == null || existToken.Type != AuthTokenType.TelegramUserId || existToken.UserId != user.Id)
+			if (existToken == null)
 			{
-				await _dal.AuthTokens.Add(new AuthToken("any", token, type) { User = user});
+				_context.AuthTokens.Add(new AuthToken("any", token, type) { User = user});
+				await _context.SaveChangesAsync();
+			}
+			else
+			{
+				await UpdateToken(existToken, token);
 			}
 		}
 
-		public async Task<AuthToken> FindAnyToken(string token)
+		public async Task<AuthToken> FindAnyTokenAsync(string userId, string token, AuthTokenType type)
 		{
-			return await _dal.AuthTokens.FindAnyToken(token);
+			return await _context.AuthTokens.SingleOrDefaultAsync(x => x.UserId == userId && x.Token == token && x.Type == type);
 		}
 
 		public async Task<AuthToken> UpdateToken(AuthToken oldToken, string newToken)
 		{
 			oldToken.Update("any", newToken);
-			await _dal.AuthTokens.Update(oldToken);
+            _context.Entry(oldToken).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
 			return oldToken;
 		}

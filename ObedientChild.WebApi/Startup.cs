@@ -20,6 +20,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
 using ObedientChild.Infrastructure.SearchImages;
+using ObedientChild.WebApi.Auth;
 
 namespace ObedientChild.WebApi
 {
@@ -59,6 +60,8 @@ namespace ObedientChild.WebApi
             ConfigurePolicies(services);
 
             ConfigureSearchImages(services);
+
+            ConfigureGoogleAuth(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -290,7 +293,7 @@ namespace ObedientChild.WebApi
                 // Добавляем политики на наличие нужной роли у учётной записи.
                 options.AddPolicy(Policy.MustBeAllAccessMode, policy => policy.RequireClaim(nameof(AccessMode), AccessMode.All.ToString()));
                 //options.AddPolicy(Policy.MustBeAllOrImportAccessMode, policy => policy.RequireClaim(nameof(AccessMode), AccessMode.All.ToString(), AccessMode.Import.ToString()));
-                options.AddPolicy(Policy.MustBeAllOrExportAccessMode, policy => policy.RequireClaim(nameof(AccessMode), AccessMode.All.ToString(), AccessMode.Export.ToString()));
+                options.AddPolicy(Policy.MustBeAllOrRestrictedAccessMode, policy => policy.RequireClaim(nameof(AccessMode), AccessMode.All.ToString(), AccessMode.Restricted.ToString()));
                 options.AddPolicy(Policy.MustBeAdmin, policy => policy.RequireRole(Role.Admin));
             });
         }
@@ -314,6 +317,29 @@ namespace ObedientChild.WebApi
             }
 
             services.AddSearchImages(serpapiOptions);
+        }
+
+        private void ConfigureGoogleAuth(IServiceCollection services)
+        {
+            GoogleAuthOptions googleAuth;
+
+            if (CurrentEnvironment.IsDevelopment())
+            {
+                googleAuth = Configuration
+                    .GetSection("GoogleAuth")
+                    .Get<GoogleAuthOptions>();
+            }
+            else
+            {
+                googleAuth = new GoogleAuthOptions
+                {
+                    RedirectUrl = Environment.GetEnvironmentVariable("GOOGLE_REDIRECT_URL"),
+                    ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET"),
+                    ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID"),
+                };
+            }
+
+            services.AddSingleton(googleAuth);
         }
     }
 }

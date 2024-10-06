@@ -30,7 +30,7 @@ namespace ObedientChild.UnitTests
 		}
 
 		[Test]
-		public async System.Threading.Tasks.Task Register_ShouldBeCallAddMethodWithRightArguments()
+		public async Task Register_ShouldBeCallAddMethodWithRightArguments()
 		{
 			_manager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
@@ -44,10 +44,10 @@ namespace ObedientChild.UnitTests
 		}
 
 		[Test]
-		public async System.Threading.Tasks.Task RegisterByToken_ShouldBeCallAddMethodWithRightArguments()
+		public async Task RegisterByToken_ShouldBeCallAddMethodWithRightArguments()
 		{
 			_manager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(IdentityResult.Success);
-            _authTokenService.Setup(x => x.AddToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<AuthTokenType>())).Returns(System.Threading.Tasks.Task.CompletedTask);
+            _authTokenService.Setup(x => x.AddOrUpdateTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<AuthTokenType>())).Returns(Task.CompletedTask);
 
 			var token = "23423423";
 			var tokenType = AuthTokenType.TelegramUserId;
@@ -56,7 +56,7 @@ namespace ObedientChild.UnitTests
 
 			_manager.Verify(x => x.CreateAsync(It.Is<ApplicationUser>(u => u.UserName == _user.UserName && u.Email == _user.Email)), Times.Exactly(1));
 
-			_authTokenService.Verify(x => x.AddToken(It.IsAny<string>(), It.Is<string>(x => x == token), It.Is<AuthTokenType>(x => x == tokenType)),
+			_authTokenService.Verify(x => x.AddOrUpdateTokenAsync(It.IsAny<string>(), It.Is<string>(x => x == token), It.Is<AuthTokenType>(x => x == tokenType)),
 				Times.Exactly(1));
 		}
 	}

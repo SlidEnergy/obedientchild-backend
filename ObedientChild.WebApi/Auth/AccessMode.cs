@@ -10,14 +10,19 @@
 		/// </summary>
 		All = 0,
 
-		/// <summary>
-		/// Доступен только импорт транзакций
-		/// </summary>
-		Import = 1,
+        /// <summary>
+        /// Доступен только импорт транзакций
+        /// </summary>
+        Import = 1,
 
-		/// <summary>
-		/// Доступен только экспорт
-		/// </summary>
-		Export = 2,
+        /// <summary>
+        /// Доступен только экспорт
+        /// </summary>
+        Export = 2,
+
+        /// <summary>
+        /// Ограниченный доступ
+        /// </summary>
+        Restricted = 3,
 	}
 }

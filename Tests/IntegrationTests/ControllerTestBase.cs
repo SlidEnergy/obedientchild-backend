@@ -23,10 +23,9 @@ namespace ObedientChild.WebApi.IntegrationTests
 		protected UserManager<ApplicationUser> _manager;
 		protected RoleManager<IdentityRole> _roleManager;
 		protected ApplicationUser _user;
-		protected DataAccessLayer _dal;
 
 		[OneTimeSetUp]
-		public async System.Threading.Tasks.Task HttpClientSetup()
+		public async Task HttpClientSetup()
 		{
 			_factory = new WebApiApplicationFactory<Startup>();
 			_client = _factory.CreateClient();
@@ -51,10 +50,6 @@ namespace ObedientChild.WebApi.IntegrationTests
 			if (_roleManager == null)
 				throw new Exception("Сервис для работы с группой пользователей не получен");
 
-			_dal = new DataAccessLayer(
-				new EfRepository<ApplicationUser, string>(_db),
-				new EfAuthTokensRepository(_db));
-
 			_user = await CreateUser("test1@email.com", "Password123#");
 			await CreateRole();
 			await _manager.AddToRoleAsync(_user, Role.Admin);
@@ -73,7 +68,7 @@ namespace ObedientChild.WebApi.IntegrationTests
 			return user;
 		}
 
-		protected virtual async System.Threading.Tasks.Task CreateRole()
+		protected virtual async Task CreateRole()
 		{
 			var result = await _roleManager.CreateAsync(new IdentityRole(Role.Admin));
 
@@ -81,7 +76,7 @@ namespace ObedientChild.WebApi.IntegrationTests
 				throw new Exception("Новая группа не создана");
 		}
 
-		protected virtual async System.Threading.Tasks.Task Login(string email, string password)
+		protected virtual async Task Login(string email, string password)
 		{
 			var request = HttpRequestBuilder.CreateJsonRequest("POST", "/api/v1/users/token", null,
 				new { Email = email, Password = password, ConfirmPassword = password });

@@ -55,7 +55,7 @@ namespace ObedientChild.App
 
 			if (identity.Succeeded)
 			{
-				await _authTokenService.AddToken(user.Id, token, tokenType);
+				await _authTokenService.AddOrUpdateTokenAsync(user.Id, token, tokenType);
 			}
 
 			return identity;

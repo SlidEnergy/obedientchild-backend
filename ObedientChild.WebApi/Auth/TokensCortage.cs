@@ -1,4 +1,4 @@
-﻿namespace ObedientChild.WebApi
+﻿namespace ObedientChild.Infrastructure.GoogleAuth
 {
     public class TokensCortage
     {

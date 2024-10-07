@@ -1,4 +1,4 @@
-﻿namespace ObedientChild.WebApi.Auth
+﻿namespace ObedientChild.Infrastructure.GoogleAuth
 {
     public class GoogleAuthOptions
     {

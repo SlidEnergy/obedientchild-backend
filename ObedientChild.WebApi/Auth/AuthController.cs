@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ObedientChild.App;
+using ObedientChild.Infrastructure.GoogleAuth;
 using Slid.Auth.Core;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,14 @@ namespace ObedientChild.WebApi.Auth
         private readonly GoogleAuthOptions _options;
         private readonly IUsersService _usersService;
         private readonly ITokenService _tokenService;
+        private readonly IGoogleTokenService _googleTokenService;
 
-        public AuthController(GoogleAuthOptions options, IUsersService usersService, ITokenService tokenService)
+        public AuthController(GoogleAuthOptions options, IUsersService usersService, ITokenService tokenService, IGoogleTokenService googleTokenService)
         {
             _options = options;
             _usersService = usersService;
             _tokenService = tokenService;
+            _googleTokenService = googleTokenService;
         }
 
         [HttpGet("google")]
@@ -40,10 +43,19 @@ namespace ObedientChild.WebApi.Auth
             return Redirect(url);
         }
 
+        [HttpPost("google/refreshToken")]
+        [Authorize]
+        public async Task<ActionResult<string>> GoogleCallback(GoogleAccessTokenResponse tokens)
+        {
+            var googleAccessToken = await _googleTokenService.RefreshAccessTokenAsync(tokens.RefreshToken);
+
+            return Ok(googleAccessToken);
+        }
+
         [HttpGet("google/callback")]
         public async Task<IActionResult> GoogleCallback(string code, string state)
         {
-            var googleAccessToken = await GetAccessTokenAsync(code);
+            var response = await _googleTokenService.GetAccessTokenAsync(code);
 
             var token = Encoding.UTF8.GetString(Convert.FromBase64String(state));
             var user = await _usersService.GetByAuthTokenAsync(token, Domain.AuthTokenType.ApiKey);
@@ -51,37 +63,7 @@ namespace ObedientChild.WebApi.Auth
             await _tokenService.SetTokenAsync(user.Id, token, Domain.AuthTokenType.GoogleAccessToken);
 
             // Редирект на домашнюю страницу или страницу после логина
-            return Redirect(_options.FrontendRedirectUrl + "?googleAccessToken=" + googleAccessToken);
-        }
-
-        private async Task<string> GetAccessTokenAsync(string authorizationCode)
-        {
-            using (var client = new HttpClient())
-            {
-                var requestUri = "https://oauth2.googleapis.com/token";
-
-                var parameters = new Dictionary<string, string>
-                {
-                    { "code", authorizationCode },
-                        {"client_id", _options.ClientId},
-                        {"client_secret", _options.ClientSecret},
-                        {"redirect_uri", _options.RedirectUrl},
-                    { "grant_type", "authorization_code" }
-                };
-
-                var content = new FormUrlEncodedContent(parameters);
-
-                var response = await client.PostAsync(requestUri, content);
-                response.EnsureSuccessStatusCode();
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-
-                // Вы можете использовать JSON парсер, например, Newtonsoft.Json, чтобы разобрать ответ
-                dynamic responseJson = Newtonsoft.Json.JsonConvert.DeserializeObject(responseContent);
-                string accessToken = responseJson.access_token;
-
-                return accessToken;
-            }
+            return Redirect($"{_options.FrontendRedirectUrl}?googleAccessToken={response.Token}&googleRefreshToken={response.RefreshToken}&expiresIn={response.ExpiresIn}");
         }
     }
 }

@@ -21,6 +21,7 @@ using System.Linq;
 using System.Reflection;
 using ObedientChild.Infrastructure.SearchImages;
 using ObedientChild.WebApi.Auth;
+using ObedientChild.Infrastructure.GoogleAuth;
 
 namespace ObedientChild.WebApi
 {
@@ -340,7 +341,7 @@ namespace ObedientChild.WebApi
                 };
             }
 
-            services.AddSingleton(googleAuth);
+            services.AddGoogleAuth(googleAuth);
         }
     }
 }

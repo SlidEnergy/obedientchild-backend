@@ -39,7 +39,7 @@ namespace ObedientChild.WebApi
         }
 
         [HttpPost("refresh")]
-        public async Task<ActionResult<TokenInfo>> Refresh(TokensCortage tokens)
+        public async Task<ActionResult<TokenInfo>> Refresh(GoogleAccessTokenResponse tokens)
         {
             try
             {

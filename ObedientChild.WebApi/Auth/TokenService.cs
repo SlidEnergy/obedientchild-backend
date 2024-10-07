@@ -43,7 +43,7 @@ namespace ObedientChild.WebApi
 		//	return new TokensCortage() { Token = newToken, RefreshToken = newRefreshToken };
 		//}
 
-		public async Task<TokensCortage> RefreshTokenAsync(string token, string refreshToken)
+		public async Task<GoogleAccessTokenResponse> RefreshTokenAsync(string token, string refreshToken)
 		{
 			var principal = GetPrincipalFromExpiredToken(token);
 			var userId = principal.GetUserId();
@@ -57,17 +57,17 @@ namespace ObedientChild.WebApi
 
 			await _authTokenService.UpdateToken(savedToken, newRefreshToken);
 
-			return new TokensCortage() { Token = newToken, RefreshToken = newRefreshToken };
+			return new GoogleAccessTokenResponse() { Token = newToken, RefreshToken = newRefreshToken };
 		}
 
-		public async Task<TokensCortage> CreateAccessAndRefreshTokensAsync(ApplicationUser user, AccessMode accessMode)
+		public async Task<GoogleAccessTokenResponse> CreateAccessAndRefreshTokensAsync(ApplicationUser user, AccessMode accessMode)
 		{
 			var refreshToken = _tokenGenerator.GenerateRefreshToken();
 			await _authTokenService.AddOrUpdateTokenAsync(user.Id, refreshToken, AuthTokenType.RefreshToken);
 
 			var roles = await _userManager.GetRolesAsync(user);
 
-			return new TokensCortage()
+			return new GoogleAccessTokenResponse()
 			{
 				Token = _tokenGenerator.GenerateAccessToken(user, roles, accessMode),
 				RefreshToken = refreshToken
@@ -108,7 +108,7 @@ namespace ObedientChild.WebApi
 			return principal;
 		}
 
-		public async Task<TokensCortage> CheckCredentialsAndGetTokenAsync(string email, string password)
+		public async Task<GoogleAccessTokenResponse> CheckCredentialsAndGetTokenAsync(string email, string password)
 		{
 			var user = await _userManager.FindByNameAsync(email);
 

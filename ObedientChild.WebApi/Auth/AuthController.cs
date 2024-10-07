@@ -45,9 +45,9 @@ namespace ObedientChild.WebApi.Auth
 
         [HttpPost("google/refreshToken")]
         [Authorize]
-        public async Task<ActionResult<string>> RefreshToken(GoogleAccessTokenResponse tokens)
+        public async Task<ActionResult<string>> RefreshToken(GoogleAuthInputModel model)
         {
-            var googleAccessToken = await _googleTokenService.RefreshAccessTokenAsync(tokens.RefreshToken);
+            var googleAccessToken = await _googleTokenService.RefreshAccessTokenAsync(model.RefreshToken);
 
             return Ok(googleAccessToken);
         }

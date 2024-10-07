@@ -56,7 +56,9 @@ namespace ObedientChild.Infrastructure.GoogleAuth
                     {"client_id", _options.ClientId},
                     {"client_secret", _options.ClientSecret},
                     {"redirect_uri", _options.RedirectUrl},
-                    { "grant_type", "authorization_code" }
+                    { "grant_type", "authorization_code" },
+                    { "prompt", "consent" },
+                    { "access_type", "offline" }
                 });
 
                 var response = await client.PostAsync(TokenUrl, content);

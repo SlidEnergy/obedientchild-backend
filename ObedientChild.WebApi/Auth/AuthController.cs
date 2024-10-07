@@ -39,13 +39,13 @@ namespace ObedientChild.WebApi.Auth
             string stateToken = Convert.ToBase64String(Encoding.UTF8.GetBytes(token));
 
             var scopes = "https://www.googleapis.com/auth/calendar";
-            var url = $"https://accounts.google.com/o/oauth2/v2/auth?client_id={_options.ClientId}&redirect_uri={_options.RedirectUrl}&response_type=code&scope={Uri.EscapeDataString(scopes)}&access_type=offline&state={stateToken}";
+            var url = $"https://accounts.google.com/o/oauth2/v2/auth?client_id={_options.ClientId}&redirect_uri={_options.RedirectUrl}&response_type=code&scope={Uri.EscapeDataString(scopes)}&access_type=offline&state={stateToken}&prompt=consent";
             return Redirect(url);
         }
 
         [HttpPost("google/refreshToken")]
         [Authorize]
-        public async Task<ActionResult<string>> GoogleCallback(GoogleAccessTokenResponse tokens)
+        public async Task<ActionResult<string>> RefreshToken(GoogleAccessTokenResponse tokens)
         {
             var googleAccessToken = await _googleTokenService.RefreshAccessTokenAsync(tokens.RefreshToken);
 

@@ -28,7 +28,7 @@ namespace ObedientChild.WebApi
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<Deed>>> GetList([FromQuery]DeedType type)
+        public async Task<ActionResult<IEnumerable<Deed>>> GetList([FromQuery]IEnumerable<DeedType> type)
         {
             var list = await _service.GetListAsync(type);
 

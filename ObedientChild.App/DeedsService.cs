@@ -23,9 +23,9 @@ namespace ObedientChild.App.Habits
             _balanceService = balanceService;
         }
 
-        public async Task<List<Deed>> GetListAsync(DeedType type)
+        public async Task<List<Deed>> GetListAsync(IEnumerable<DeedType> types)
         {
-            return await _context.Deeds.Where(x => x.Type == type).ToListAsync();
+            return await _context.Deeds.Where(x => types.Contains(x.Type)).ToListAsync();
         }
         public async Task<Deed> GetByIdAsync(int id)
         {

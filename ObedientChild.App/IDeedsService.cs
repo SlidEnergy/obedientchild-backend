@@ -10,7 +10,7 @@ namespace ObedientChild.App.Habits
         Task AddAsync(Deed model);
         Task DeleteAsync(int id);
         Task<Deed> GetByIdAsync(int id);
-        Task<List<Deed>> GetListAsync(DeedType type);
+        Task<List<Deed>> GetListAsync(IEnumerable<DeedType> types);
         Task<Deed> UpdateAsync(Deed model, IEnumerable<int> characterTraitIds);
         Task<int> InvokeDeedAsync(int childId, int id, Deed deed, string userId = null);
     }
